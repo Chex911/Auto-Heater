@@ -83,14 +83,14 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_sub_page01, container, false);
-        mSwitch = (Switch) view.findViewById(R.id.switch_temp);
-        mSwitch.setChecked(true);
-        if (mSwitch != null) {
-            mSwitch.setOnCheckedChangeListener(this);
-        }
+//        mSwitch = (Switch) view.findViewById(R.id.switch_temp);
+//        mSwitch.setChecked(true);
+//        if (mSwitch != null) {
+//            mSwitch.setOnCheckedChangeListener(this);
+//        }
 
-        MButton = (Button) view.findViewById(R.id.MainButton);
-        MButton.setOnClickListener(this);
+//        MButton = (Button) view.findViewById(R.id.MainButton);
+//        MButton.setOnClickListener(this);
         return view;
     }
 
@@ -108,16 +108,16 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
+//    }
 
     @Override
     public void onDetach() {

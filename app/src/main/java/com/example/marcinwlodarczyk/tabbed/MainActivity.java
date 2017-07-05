@@ -25,6 +25,10 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import layout.SubPage01;
+import layout.SubPage02;
+import layout.SubPage03;
+
 import static com.example.marcinwlodarczyk.tabbed.R.id.container;
 
 public class MainActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener {
@@ -308,9 +312,19 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position){
+                case 0:
+                    SubPage01 tab1 = new SubPage01();
+                    return tab1;
+                case 1:
+                    SubPage02 tab2 =new SubPage02();
+                    return tab2;
+                case 2:
+                    SubPage03 tab3 = new SubPage03();
+                    return tab3;
+                default:
+                    return null;
+            }
         }
 
         @Override
@@ -337,52 +351,52 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-
-            View myInflatedView = inflater.inflate(R.layout.fragment_sub_page02, container, false);
-            //conn.setView(myInflatedView);
-
-
-            if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
-                View rootView = inflater.inflate(R.layout.fragment_sub_page01, container, false);
-                return rootView;
-            } else if (getArguments().getInt(ARG_SECTION_NUMBER) == 2) {
-
-                View rootView = inflater.inflate(R.layout.fragment_sub_page02, container, false);
-                return rootView;
-            } else {
-                View rootView = inflater.inflate(R.layout.fragment_sub_page03, container, false);
-                return rootView;
-            }
-
-        }
-
-    }
+//    public static class PlaceholderFragment extends Fragment {
+//        /**
+//         * The fragment argument representing the section number for this
+//         * fragment.
+//         */
+//        private static final String ARG_SECTION_NUMBER = "section_number";
+//
+//        /**
+//         * Returns a new instance of this fragment for the given section
+//         * number.
+//         */
+//        public static PlaceholderFragment newInstance(int sectionNumber) {
+//            PlaceholderFragment fragment = new PlaceholderFragment();
+//            Bundle args = new Bundle();
+//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+//            fragment.setArguments(args);
+//            return fragment;
+//        }
+//
+//        public PlaceholderFragment() {
+//
+//        }
+//
+//        @Override
+//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                                 Bundle savedInstanceState) {
+//
+//            View myInflatedView = inflater.inflate(R.layout.fragment_sub_page02, container, false);
+//            //conn.setView(myInflatedView);
+//
+//
+//            if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
+//                View rootView = inflater.inflate(R.layout.fragment_sub_page01, container, false);
+//                return rootView;
+//            } else if (getArguments().getInt(ARG_SECTION_NUMBER) == 2) {
+//
+//                View rootView = inflater.inflate(R.layout.fragment_sub_page02, container, false);
+//                return rootView;
+//            } else {
+//                View rootView = inflater.inflate(R.layout.fragment_sub_page03, container, false);
+//                return rootView;
+//            }
+//
+//        }
+//
+//    }
 
     class DBHelper extends SQLiteOpenHelper {
 
