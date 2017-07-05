@@ -64,7 +64,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.64"
                 android:background="@color/buttons"
-                android:onClick="onClickPref"
                 android:text="Temperature" />
 
             <Switch
@@ -94,7 +93,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.38"
                 android:background="@color/buttons"
-                android:onClick="onClickPref"
                 android:text="Time" />
 
             <Switch
@@ -107,8 +105,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <Button
@@ -125,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.38"
                 android:background="@color/buttons"
-                android:onClick="onClickBT"
+                android:onClick="onClickBT1"
                 android:text="Manually Connect to Heater" />
         </LinearLayout>
 

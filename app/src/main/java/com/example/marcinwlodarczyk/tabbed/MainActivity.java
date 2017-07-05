@@ -31,7 +31,7 @@ import layout.SubPage03;
 
 import static com.example.marcinwlodarczyk.tabbed.R.id.container;
 
-public class MainActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener {
+public class MainActivity extends AppCompatActivity {
 
     public static bluetoothManager conn;
     private static final String TAG = "MyActivity";
@@ -135,11 +135,13 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         premissions();
         txtArduino = (TextView) findViewById(R.id.txtArduino);
         //conn.setView(txtArduino);
-        if (v.getId() == R.id.manual_con) {
-            new bluetooth_atask_conn().execute(); //Call the class to connect;
-        }
-//        if (v.getId() == R.id.MainButton) {
-//            if (conn.getStatus()) {
+//        if (v.getId() == R.id.manual_con) {
+//            Log.d("TAG","DONE");
+//            new bluetooth_atask_conn().execute(); //Call the class to connect;
+//        }
+       if (v.getId() == R.id.MainButton) {
+
+//           if (conn.getStatus()) {
 //                if (!flag) {
 //                    conn.sendData("227");
 //                } else {
@@ -156,102 +158,18 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
 //                }
 //                flag = !flag;
 //            }
-//        }
+        }
 
     }
 
     public void onClickInsert(View v) {
         String [][] str = {{"date","20 jun"},{"time","25"},{"temperature","18"}};
         String [][] str1 = {{"name","User1"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"}};
-        dbHelper.insert(str,"statistic");
-        dbHelper.insert(str1,"user");
+        dbHelper.insert(dbHelper,str,"statistic");
+        dbHelper.insert(dbHelper,str1,"user");
 
     }
 
-    public void onClickPref(View v) {
-        final Dialog d = new Dialog(MainActivity.this);
-
-        d.setContentView(R.layout.dialog);
-        Button b1 = (Button) d.findViewById(R.id.button1);
-        Button b2 = (Button) d.findViewById(R.id.button2);
-        final TextView temmpp;
-
-        final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
-        switch (v.getId()) {
-            case R.id.btn_temp:
-                d.setTitle("Set Temperature");
-                temmpp = (TextView) findViewById(R.id.temper);
-                np.setMaxValue(33);
-                np.setMinValue(10);
-                try {
-
-                    String path = temmpp.getText().toString();
-                    String s[] = path.split(" ");
-                    String result = s[0];
-                    np.setValue(Integer.parseInt(result));
-                } catch (Throwable cause) {
-                    np.setValue(18);
-                }
-                np.setWrapSelectorWheel(false);
-                np.setOnValueChangedListener(this);
-                b1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        temmpp.setText(String.valueOf(np.getValue()) + " °C");
-                        dbHelper.update_where(String.valueOf(np.getValue()),"temp","id","user","1");
-                        //tv.setText(String.valueOf(np.getValue()));
-                        d.dismiss();
-                    }
-                });
-                b2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        d.dismiss();
-                    }
-                });
-                break;
-
-
-            case R.id.btn_time:
-                d.setTitle("Set Time");
-                temmpp = (TextView) findViewById(R.id.timeb);
-                np.setMaxValue(90);
-                np.setMinValue(5);
-                try {
-                    String path = temmpp.getText().toString();
-                    String s[] = path.split(" ");
-                    String result = s[0];
-                    np.setValue(Integer.parseInt(result));
-                } catch (Throwable cause) {
-                    np.setValue(45);
-                }
-
-                np.setWrapSelectorWheel(false);
-                np.setOnValueChangedListener(this);
-                b1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        temmpp.setText(String.valueOf(np.getValue()) + " m.");
-                        dbHelper.update_where(String.valueOf(np.getValue()),"time","id","user","1");
-                        //tv.setText(String.valueOf(np.getValue()));
-                        d.dismiss();
-                    }
-                });
-                b2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        d.dismiss();
-                    }
-                });
-                break;
-
-        }
-
-        d.show();
-
-    }
 
 
     @Override
@@ -277,6 +195,10 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
             Intent turnBTon = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(turnBTon,1);
         }
+        else
+            {
+                new bluetooth_atask_conn().execute();
+            }
     }
 
     @Override
@@ -294,10 +216,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-        Log.i("value is", "" + newVal);
-    }
+
 
 
     /**
@@ -321,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
                     return tab2;
                 case 2:
                     SubPage03 tab3 = new SubPage03();
+                    tab3.setContext(MainActivity.this,dbHelper);
                     return tab3;
                 default:
                     return null;
@@ -347,139 +267,5 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         }
     }
 
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        public PlaceholderFragment() {
-//
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//
-//            View myInflatedView = inflater.inflate(R.layout.fragment_sub_page02, container, false);
-//            //conn.setView(myInflatedView);
-//
-//
-//            if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
-//                View rootView = inflater.inflate(R.layout.fragment_sub_page01, container, false);
-//                return rootView;
-//            } else if (getArguments().getInt(ARG_SECTION_NUMBER) == 2) {
-//
-//                View rootView = inflater.inflate(R.layout.fragment_sub_page02, container, false);
-//                return rootView;
-//            } else {
-//                View rootView = inflater.inflate(R.layout.fragment_sub_page03, container, false);
-//                return rootView;
-//            }
-//
-//        }
-//
-//    }
-
-    class DBHelper extends SQLiteOpenHelper {
-
-        public DBHelper(Context context) {
-            // конструктор суперкласса
-            super(context, "myDB", null, 1);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            // создаем таблицу с полями
-            Log.d(TAG, "--- onCreate database ---");
-            // создаем таблицу с полями
-
-            db.execSQL("create table  statistic ("
-                    + "id integer primary key autoincrement,"
-                    + "date text,"
-                    + "time text,"
-                    + "temperature text"
-                    + ");");
-
-            db.execSQL("create table  image ("
-                    + "id integer primary key autoincrement,"
-                    + "name text,"
-                    + "source text"
-                    + ");");
-            db.execSQL("create table if not exists user ("
-                    + "id integer primary key autoincrement,"
-                    + "name text,"
-                    + "temp_bool integer,"
-                    + "temp text,"
-                    + "time_bool integer,"
-                    + "time text,"
-                    + "image integer"
-//                    + "foreign key (image) references image(id)"
-                    + ");");
-
-        }
-        public void insert(String[][] params,String table)
-        {
-            ContentValues cv = new ContentValues();
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            Log.d(TAG, "--- Insert in mytable: ---");
-            for(int i=0; i<params.length;i++) {
-                cv.put(params[i][0], params[i][1]);
-            }
-
-
-            long rowID = db.insert(table, null, cv);
-            Log.d(TAG, "row inserted, ID = " + rowID);
-            //       dbHelper.test_insert(db);
-            //  int clearCount = db.delete("mytable", null, null);
-            ;
-            dbHelper.close();
-        }
-
-//        public void test_insert(SQLiteDatabase db)
-//        {
-//            ContentValues cv = new ContentValues();
-////            cv.put("name","User 1");
-////            cv.put("temp_bool",0);
-////            cv.put("temp",25);
-////            cv.put("time_bool",0);
-////            cv.put("time",20);
-//            cv.put("name","photo1");
-//            cv.put("source","mat/ter/it");
-//            db.insert("image",null,cv);
-//        }
-
-        public void update_where(String new_value, String params, String where,String database,String current)
-        {
-            ContentValues cv = new ContentValues();
-            cv.put(params,new_value);
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            db.update(database,cv,where + "=" + current,null);
-            dbHelper.close();
-            Log.d(TAG,"Molodec:)");
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        }
-    }
 }
 
