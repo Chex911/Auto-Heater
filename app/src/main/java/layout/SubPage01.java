@@ -2,6 +2,7 @@
 package layout;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,9 +31,7 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    Button MButton;
-    private static final String TAG = "bluetooth1";
-    Switch mSwitch;
+    private static final String TAG = "SubPage01";
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -91,6 +90,8 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
 
 //        MButton = (Button) view.findViewById(R.id.MainButton);
 //        MButton.setOnClickListener(this);
+        int i =getUser();
+        Log.d(TAG,"Current User sb_p1:"+i);
         return view;
     }
 
@@ -144,5 +145,11 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    private int getUser()
+    {
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        int savedText = sharedPref.getInt("Current User",228);
+        return savedText;
     }
 }

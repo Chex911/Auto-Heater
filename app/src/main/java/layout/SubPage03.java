@@ -1,24 +1,34 @@
 package layout;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-
 import com.example.marcinwlodarczyk.tabbed.DBHelper;
-import com.example.marcinwlodarczyk.tabbed.MainActivity;
 import com.example.marcinwlodarczyk.tabbed.R;
 import com.example.marcinwlodarczyk.tabbed.bluetooth_atask_conn;
+
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,9 +45,11 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
     private static final String ARG_PARAM2 = "param2";
     Button PrButton1;
     Button PrButton2;
+    Button EditButton;
     Context context;
     Button ManConn;
     View view;
+    private static final String TAG = "SubPage3";
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -46,6 +58,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
     TextView temmpp;
     TextView time;
     DBHelper dbHelper;
+    Spinner spinner;
 
     private OnFragmentInteractionListener mListener;
 
@@ -89,15 +102,15 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
         // Inflate the layout for this fragment
         view =inflater.inflate(R.layout.fragment_sub_page03, container, false);
         time = (TextView) view.findViewById(R.id.timeb);
-        time.setText(dbHelper.select(dbHelper,"user","time","")+" m");
+        time.setText(dbHelper.select(dbHelper,"user","time","WHERE id="+getUser())+" m");
         temmpp = (TextView) view.findViewById(R.id.temper);
-        temmpp.setText(dbHelper.select(dbHelper,"user","temp","")+" °C");
+        temmpp.setText(dbHelper.select(dbHelper,"user","temp","WHERE id="+getUser())+" °C");
         PrButton1 = (Button) view.findViewById(R.id.btn_temp);
         PrButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     final Dialog d = new Dialog(context);
-                    d.setContentView(R.layout.dialog);
+                    d.setContentView(R.layout.dialog_params);
                     Button b1 = (Button) d.findViewById(R.id.button1);
                     Button b2 = (Button) d.findViewById(R.id.button2);
 
@@ -127,7 +140,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
                                 public void onClick(View v) {
 
                                     temmpp.setText(String.valueOf(np.getValue()) + " °C");
-                                    dbHelper.update_where(dbHelper,String.valueOf(np.getValue()),"temp","id","user","1");
+                                    dbHelper.update_where(dbHelper,String.valueOf(np.getValue()),"temp","id","user",getUser());
                                     //tv.setText(String.valueOf(np.getValue()));
                                     d.dismiss();
                                 }
@@ -150,7 +163,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
             @Override
             public void onClick(View v) {
                 final Dialog d = new Dialog(context);
-                d.setContentView(R.layout.dialog);
+                d.setContentView(R.layout.dialog_params);
                 Button b1 = (Button) d.findViewById(R.id.button1);
                 Button b2 = (Button) d.findViewById(R.id.button2);
 
@@ -172,7 +185,6 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
                 np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                         Log.i("value is", "" + newVal);
-
                     }
                 });
                 b1.setOnClickListener(new View.OnClickListener() {
@@ -180,7 +192,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
                     public void onClick(View v) {
 
                         time.setText(String.valueOf(np.getValue()) + " m");
-                        dbHelper.update_where(dbHelper,String.valueOf(np.getValue()),"time","id","user","1");
+                        dbHelper.update_where(dbHelper,String.valueOf(np.getValue()),"time","id","user",getUser());
                         //tv.setText(String.valueOf(np.getValue()));
                         d.dismiss();
                     }
@@ -191,8 +203,6 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
                         d.dismiss();
                     }
                 });
-
-
                 d.show();
 
 
@@ -203,24 +213,86 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
             @Override
             public void onClick(View v) {
                 //conn.setView(txtArduino);
-                if (v.getId() == R.id.manual_con) {
-                    Log.d("TAG", "DONE");
-                    new bluetooth_atask_conn().execute(); //Call the class to connect;
-                }
+//                if (v.getId() == R.id.manual_con) {
+//                    Log.d("TAG", "DONE");
+//                    new bluetooth_atask_conn().execute(); //Call the class to connect;
+//                }
+                new bluetooth_atask_conn().execute();
             }
           });
+
+        spinner = (Spinner) view.findViewById(R.id.user_spinner);
+        spinner.setSelection(getUser());
+        spinner.setAdapter(new ArrayAdapter<String>(context,
+                android.R.layout.simple_spinner_dropdown_item, dbHelper.select(dbHelper,"user","name")));
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                // показываем позиция нажатого элемента
+//                SharedPreferences sPref = getPreferences(MODE_PRIVATE);
+//                SharedPreferences.Editor ed = sPref.edit();
+//                ed.putString(SAVED_TEXT, "1");
+//                ed.commit();
+                setUser(spinner.getSelectedItemPosition()+1);
+                time.setText(dbHelper.select(dbHelper,"user","time","WHERE id="+getUser())+" m");
+                temmpp.setText(dbHelper.select(dbHelper,"user","temp","WHERE id="+getUser())+" °C");
+                swtemp.setChecked(dbHelper.select(dbHelper,"user","temp_bool","WHERE id="+getUser()).equals("1"));
+                swtime.setChecked(dbHelper.select(dbHelper,"user","time_bool","WHERE id="+getUser()).equals("1"));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
         swtemp= (Switch) view.findViewById(R.id.switch_temp);
-        swtemp.setChecked(dbHelper.select(dbHelper,"user","temp_bool","").equals("1"));
+        swtemp.setChecked(dbHelper.select(dbHelper,"user","temp_bool","WHERE id="+getUser()).equals("1"));
         swtemp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                dbHelper.update_where(dbHelper,isChecked ? "1" : "0","temp_bool","id","user","1");
+                dbHelper.update_where(dbHelper,isChecked ? "1" : "0","temp_bool","id","user",getUser());
             }
         });
         swtime= (Switch) view.findViewById(R.id.switch_time);
-        swtime.setChecked(dbHelper.select(dbHelper,"user","time_bool","").equals("1"));
+        swtime.setChecked(dbHelper.select(dbHelper,"user","time_bool","WHERE id="+getUser()).equals("1"));
         swtime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                dbHelper.update_where(dbHelper,isChecked ? "1" : "0","time_bool","id","user","1");
+                dbHelper.update_where(dbHelper,isChecked ? "1" : "0","time_bool","id","user",getUser());
+            }
+        });
+        EditButton=(Button) view.findViewById(R.id.btn_editName);
+        EditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Rename User");
+
+// Set up the input
+                final EditText input = new EditText(context);
+
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                input.setText(dbHelper.select(dbHelper,"user","name","WHERE id="+getUser()));
+                input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(20)});
+                builder.setView(input);
+
+// Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(TAG,input.getText().toString());
+                        dbHelper.update_where(dbHelper,input.getText().toString(),"name","id","user",getUser());
+                        spinner.setAdapter(new ArrayAdapter<String>(context,
+                                android.R.layout.simple_spinner_dropdown_item, dbHelper.select(dbHelper,"user","name")));
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
             }
         });
 
@@ -283,4 +355,18 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+    private int getUser()
+    {
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        int savedText = sharedPref.getInt("Current User",228);
+       return savedText;
+    }
+    private void setUser(int value)
+    {
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("Current User",value);
+        editor.commit();
+    }
+
 }
