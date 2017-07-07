@@ -20,7 +20,6 @@ public class bluetoothManager{
 
     public Handler h;
     public TextView txtArduino;
-    //public ImageView sts;
 
     final int RECIEVE_MESSAGE = 1;
 
@@ -46,37 +45,33 @@ public class bluetoothManager{
     public bluetoothManager(final Activity activityContext) throws IOException {
         this.activityContext = activityContext;
         //txtArduino = (TextView) activityContext.findViewById(R.id.txtArduino);
-//         sts=(ImageView) activityContext.findViewById(R.id.conn_status);
-//         sts.setColorFilter(Color.parseColor("#ff0000"));
+
+        h = new Handler() {
+            public void handleMessage(android.os.Message msg) {
+                switch (msg.what) {
+                    case RECIEVE_MESSAGE:                                                   // если приняли сообщение в Handler
+                        byte[] readBuf = (byte[]) msg.obj;
+                        String strIncom = new String(readBuf, 0, msg.arg1);
+                        sb.append(strIncom);                                                // формируем строку
+                        int endOfLineIndex = sb.indexOf("\r\n");                            // определяем символы конца строки
+                        if (endOfLineIndex > 0) {                                            // если встречаем конец строки,
+                            String sbprint = sb.substring(0, endOfLineIndex);               // то извлекаем строку
+                            sb.delete(0, sb.length());                                      // и очищаем sb
+                            Log.d("TEST", "ODPOWIEDZ OD ARDUINO: -----> "+ sbprint);
+                            if(txtArduino != null) {
+                                //txtArduino = (TextView) fragment_01.findViewById(R.id.txtArduino);
+                                txtArduino.setText(sbprint);
+                            }
+
+                            //txtArduino.setText("Ответ от Arduino: " + sbprint);             // обновляем TextViewtm
+                        }
+                        //Log.d(TAG, "...Строка:"+ sb.toString() +  "Байт:" + msg.arg1 + "...");
+                        break;
+                }
+            };
+        };
+
         connect();
-//        h = new Handler() {
-//            public void handleMessage(android.os.Message msg) {
-//                switch (msg.what) {
-//                    case RECIEVE_MESSAGE:                                                   // если приняли сообщение в Handler
-//                        byte[] readBuf = (byte[]) msg.obj;
-//                        String strIncom = new String(readBuf, 0, msg.arg1);
-//                        sb.append(strIncom);                                                // формируем строку
-//                        int endOfLineIndex = sb.indexOf("\r\n");                            // определяем символы конца строки
-//                        if (endOfLineIndex > 0) {                                            // если встречаем конец строки,
-//                            String sbprint = sb.substring(0, endOfLineIndex);               // то извлекаем строку
-//                            sb.delete(0, sb.length());                                      // и очищаем sb
-//                            Log.d("TEST", "ODPOWIEDZ OD ARDUINO: -----> "+ sbprint);
-//                            if(txtArduino != null) {
-//                                //txtArduino = (TextView) fragment_01.findViewById(R.id.txtArduino);
-//                                txtArduino.setText(sbprint);
-//
-//                            }
-//
-//                            //txtArduino.setText("Ответ от Arduino: " + sbprint);             // обновляем TextViewtm
-//                        }
-//
-//                        //Log.d(TAG, "...Строка:"+ sb.toString() +  "Байт:" + msg.arg1 + "...");
-//                        break;
-//                }
-//            };
-//        };
-
-
     }
 
     public bluetoothManager() throws IOException {
@@ -102,7 +97,7 @@ public class bluetoothManager{
     public void connect(){
 
         btAdapter = BluetoothAdapter.getDefaultAdapter(); //BluetoothAdapter
-        checkBTState();
+
 
         try {
             device = btAdapter.getRemoteDevice(address);
@@ -223,6 +218,7 @@ public class bluetoothManager{
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);        // Получаем кол-во байт и само собщение в байтовый массив "buffer"
                     h.obtainMessage(RECIEVE_MESSAGE, bytes, -1, buffer).sendToTarget();     // Отправляем в очередь сообщений Handler
+
                 } catch (IOException e) {
                     break;
                 }
@@ -250,4 +246,3 @@ public class bluetoothManager{
     }
 
 }
-

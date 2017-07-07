@@ -44,7 +44,7 @@
                 android:layout_height="55dp"
                 android:layout_weight="8"
                 android:minHeight="179dp"
-                android:textAlignment="center" />
+                android:textAlignment="viewEnd" />
 
             <Button
                 android:id="@+id/btn_editName"

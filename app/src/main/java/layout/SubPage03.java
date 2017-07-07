@@ -101,15 +101,17 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         view =inflater.inflate(R.layout.fragment_sub_page03, container, false);
-        time = (TextView) view.findViewById(R.id.timeb);
-        time.setText(dbHelper.select(dbHelper,"user","time","WHERE id="+getUser())+" m");
-        temmpp = (TextView) view.findViewById(R.id.temper);
-        temmpp.setText(dbHelper.select(dbHelper,"user","temp","WHERE id="+getUser())+" °C");
-        PrButton1 = (Button) view.findViewById(R.id.btn_temp);
-        PrButton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if(getUser()!=0) {
+            time = (TextView) view.findViewById(R.id.timeb);
+            time.setText(dbHelper.select(dbHelper, "user", "time", "WHERE id=" + getUser()) + " m");
+            temmpp = (TextView) view.findViewById(R.id.temper);
+            temmpp.setText(dbHelper.select(dbHelper, "user", "temp", "WHERE id=" + getUser()) + " °C");
+            PrButton1 = (Button) view.findViewById(R.id.btn_temp);
+            PrButton1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     final Dialog d = new Dialog(context);
                     d.setContentView(R.layout.dialog_params);
                     Button b1 = (Button) d.findViewById(R.id.button1);
@@ -117,238 +119,236 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
 
 
                     final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
-                            d.setTitle("Choose Temp.");
-                            np.setMaxValue(33);
-                            np.setMinValue(10);
-                            try {
+                    d.setTitle("Choose Temp.");
+                    np.setMaxValue(33);
+                    np.setMinValue(10);
+                    try {
 
-                                String path = temmpp.getText().toString();
-                                String s[] = path.split(" ");
-                                String result = s[0];
-                                np.setValue(Integer.parseInt(result));
-                            } catch (Throwable cause) {
-                                np.setValue(18);
-                            }
-                            np.setWrapSelectorWheel(false);
-                            np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-                                public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                                    Log.i("value is", "" + newVal);
+                        String path = temmpp.getText().toString();
+                        String s[] = path.split(" ");
+                        String result = s[0];
+                        np.setValue(Integer.parseInt(result));
+                    } catch (Throwable cause) {
+                        np.setValue(18);
+                    }
+                    np.setWrapSelectorWheel(false);
+                    np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                            Log.i("value is", "" + newVal);
 
-                                }
-                            });
-                            b1.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
+                        }
+                    });
+                    b1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                                    temmpp.setText(String.valueOf(np.getValue()) + " °C");
-                                    dbHelper.update_where(dbHelper,String.valueOf(np.getValue()),"temp","id","user",getUser());
-                                    //tv.setText(String.valueOf(np.getValue()));
-                                    d.dismiss();
-                                }
-                            });
-                            b2.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    d.dismiss();
-                                }
-                            });
+                            temmpp.setText(String.valueOf(np.getValue()) + " °C");
+                            dbHelper.update_where(dbHelper, String.valueOf(np.getValue()), "temp", "id", "user", getUser());
+                            //tv.setText(String.valueOf(np.getValue()));
+                            d.dismiss();
+                        }
+                    });
+                    b2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            d.dismiss();
+                        }
+                    });
 
 
                     d.show();
 
 
-            }
-        });
-        PrButton2 = (Button) view.findViewById(R.id.btn_time);
-        PrButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog d = new Dialog(context);
-                d.setContentView(R.layout.dialog_params);
-                Button b1 = (Button) d.findViewById(R.id.button1);
-                Button b2 = (Button) d.findViewById(R.id.button2);
-
-
-                final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
-                d.setTitle("Set Time");
-                np.setMaxValue(90);
-                np.setMinValue(5);
-                try {
-
-                    String path = time.getText().toString();
-                    String s[] = path.split(" ");
-                    String result = s[0];
-                    np.setValue(Integer.parseInt(result));
-                } catch (Throwable cause) {
-                    np.setValue(45);
                 }
-                np.setWrapSelectorWheel(false);
-                np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-                    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                        Log.i("value is", "" + newVal);
-                    }
-                });
-                b1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        time.setText(String.valueOf(np.getValue()) + " m");
-                        dbHelper.update_where(dbHelper,String.valueOf(np.getValue()),"time","id","user",getUser());
-                        //tv.setText(String.valueOf(np.getValue()));
-                        d.dismiss();
-                    }
-                });
-                b2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        d.dismiss();
-                    }
-                });
-                d.show();
+            });
+            PrButton2 = (Button) view.findViewById(R.id.btn_time);
+            PrButton2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Dialog d = new Dialog(context);
+                    d.setContentView(R.layout.dialog_params);
+                    Button b1 = (Button) d.findViewById(R.id.button1);
+                    Button b2 = (Button) d.findViewById(R.id.button2);
 
 
-            }
-        });
-        ManConn =(Button) view.findViewById(R.id.manual_con);
-        ManConn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //conn.setView(txtArduino);
+                    final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
+                    d.setTitle("Set Time");
+                    np.setMaxValue(90);
+                    np.setMinValue(5);
+                    try {
+
+                        String path = time.getText().toString();
+                        String s[] = path.split(" ");
+                        String result = s[0];
+                        np.setValue(Integer.parseInt(result));
+                    } catch (Throwable cause) {
+                        np.setValue(45);
+                    }
+                    np.setWrapSelectorWheel(false);
+                    np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                            Log.i("value is", "" + newVal);
+                        }
+                    });
+                    b1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            time.setText(String.valueOf(np.getValue()) + " m");
+                            dbHelper.update_where(dbHelper, String.valueOf(np.getValue()), "time", "id", "user", getUser());
+                            //tv.setText(String.valueOf(np.getValue()));
+                            d.dismiss();
+                        }
+                    });
+                    b2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            d.dismiss();
+                        }
+                    });
+                    d.show();
+
+
+                }
+            });
+            ManConn = (Button) view.findViewById(R.id.manual_con);
+            ManConn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //conn.setView(txtArduino);
 //                if (v.getId() == R.id.manual_con) {
 //                    Log.d("TAG", "DONE");
 //                    new bluetooth_atask_conn().execute(); //Call the class to connect;
 //                }
-                new bluetooth_atask_conn().execute();
-            }
-          });
+                    new bluetooth_atask_conn().execute();
+                }
+            });
 
-        spinner = (Spinner) view.findViewById(R.id.user_spinner);
+            spinner = (Spinner) view.findViewById(R.id.user_spinner);
 
-        spinner.setAdapter(new ArrayAdapter<String>(context,
-                android.R.layout.simple_spinner_dropdown_item, dbHelper.select(dbHelper,"user","name")));
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                // показываем позиция нажатого элемента
+            spinner.setAdapter(new ArrayAdapter<String>(context,
+                    android.R.layout.simple_spinner_dropdown_item, dbHelper.select(dbHelper, "user", "name")));
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view,
+                                           int position, long id) {
+                    // показываем позиция нажатого элемента
 //                SharedPreferences sPref = getPreferences(MODE_PRIVATE);
 //                SharedPreferences.Editor ed = sPref.edit();
 //                ed.putString(SAVED_TEXT, "1");
 //                ed.commit();
-                setUser(spinner.getSelectedItemPosition()+1);
-                time.setText(dbHelper.select(dbHelper,"user","time","WHERE id="+getUser())+" m");
-                temmpp.setText(dbHelper.select(dbHelper,"user","temp","WHERE id="+getUser())+" °C");
-                swtemp.setChecked(dbHelper.select(dbHelper,"user","temp_bool","WHERE id="+getUser()).equals("1"));
-                swtime.setChecked(dbHelper.select(dbHelper,"user","time_bool","WHERE id="+getUser()).equals("1"));
-                imgProfile.setImageResource(Integer.parseInt(dbHelper.select(dbHelper,"user","image","where id="+getUser())));
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-            }
-        });
-        spinner.setSelection(getUser()-1);
-        swtemp= (Switch) view.findViewById(R.id.switch_temp);
-        swtemp.setChecked(dbHelper.select(dbHelper,"user","temp_bool","WHERE id="+getUser()).equals("1"));
-        swtemp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                dbHelper.update_where(dbHelper,isChecked ? "1" : "0","temp_bool","id","user",getUser());
-            }
-        });
-        swtime= (Switch) view.findViewById(R.id.switch_time);
-        swtime.setChecked(dbHelper.select(dbHelper,"user","time_bool","WHERE id="+getUser()).equals("1"));
-        swtime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                dbHelper.update_where(dbHelper,isChecked ? "1" : "0","time_bool","id","user",getUser());
-            }
-        });
-        EditButton=(Button) view.findViewById(R.id.btn_editName);
-        EditButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Rename User");
-
-// Set up the input
-                final EditText input = new EditText(context);
-
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                input.setText(dbHelper.select(dbHelper,"user","name","WHERE id="+getUser()));
-                input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(20)});
-                builder.setView(input);
-
-// Set up the buttons
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(TAG,input.getText().toString());
-                        dbHelper.update_where(dbHelper,input.getText().toString(),"name","id","user",getUser());
-                        spinner.setAdapter(new ArrayAdapter<String>(context,
-                                android.R.layout.simple_spinner_dropdown_item, dbHelper.select(dbHelper,"user","name")));
-                        spinner.setSelection(getUser()-1);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                builder.show();
-
-            }
-        });
-        imgProfile = (ImageView) view.findViewById(R.id.profile_image);
-        imgProfile.setClickable(true);
-        if(dbHelper.select(dbHelper,"user","image","where id="+getUser())!=null)
-        imgProfile.setImageResource(Integer.parseInt(dbHelper.select(dbHelper,"user","image","where id="+getUser())));
-        imgProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog d = new Dialog(context);
-                d.setTitle("Choose a new image");
-                LinearLayout layout = new LinearLayout(context);
-                layout.setOrientation(LinearLayout.HORIZONTAL);
-// Set up the input
-                String[] images= dbHelper.select(dbHelper,"image","source");
-                for(int i=0;i<images.length;i+=3)
-                {
-                    LinearLayout layout_v = new LinearLayout(context);
-                    layout_v.setOrientation(LinearLayout.VERTICAL);
-                    for(int j=0;j<3;j++){
-                        if((i+j)!=images.length) {
-                            final ImageView input2 = new ImageView(context);
-                            final int source =Integer.parseInt(images[i + j]);
-                            input2.setImageResource(source);
-                            input2.setMinimumHeight(275);
-                            input2.setMinimumWidth(275);
-                            input2.setClickable(true);
-                            input2.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                    dbHelper.update_where(dbHelper,""+source,"image","id","user",getUser());
-                                    imgProfile.setImageResource(source);
-
-                                    d.dismiss();
-                                }
-                            });
-
-                            layout_v.addView(input2);
-                        }
-
-                    }
-                        layout.addView(layout_v);
+                    setUser(spinner.getSelectedItemPosition() + 1);
+                    time.setText(dbHelper.select(dbHelper, "user", "time", "WHERE id=" + getUser()) + " m");
+                    temmpp.setText(dbHelper.select(dbHelper, "user", "temp", "WHERE id=" + getUser()) + " °C");
+                    swtemp.setChecked(dbHelper.select(dbHelper, "user", "temp_bool", "WHERE id=" + getUser()).equals("1"));
+                    swtime.setChecked(dbHelper.select(dbHelper, "user", "time_bool", "WHERE id=" + getUser()).equals("1"));
+                    imgProfile.setImageResource(Integer.parseInt(dbHelper.select(dbHelper, "user", "image", "where id=" + getUser())));
                 }
 
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0) {
+                }
+            });
+            spinner.setSelection(getUser() - 1);
+            swtemp = (Switch) view.findViewById(R.id.switch_temp);
+            swtemp.setChecked(dbHelper.select(dbHelper, "user", "temp_bool", "WHERE id=" + getUser()).equals("1"));
+            swtemp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    dbHelper.update_where(dbHelper, isChecked ? "1" : "0", "temp_bool", "id", "user", getUser());
+                }
+            });
+            swtime = (Switch) view.findViewById(R.id.switch_time);
+            swtime.setChecked(dbHelper.select(dbHelper, "user", "time_bool", "WHERE id=" + getUser()).equals("1"));
+            swtime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    dbHelper.update_where(dbHelper, isChecked ? "1" : "0", "time_bool", "id", "user", getUser());
+                }
+            });
+            EditButton = (Button) view.findViewById(R.id.btn_editName);
+            EditButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Rename User");
+
+// Set up the input
+                    final EditText input = new EditText(context);
+
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                    input.setInputType(InputType.TYPE_CLASS_TEXT);
+                    input.setText(dbHelper.select(dbHelper, "user", "name", "WHERE id=" + getUser()));
+                    input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
+                    builder.setView(input);
+
+// Set up the buttons
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(TAG, input.getText().toString());
+                            dbHelper.update_where(dbHelper, input.getText().toString(), "name", "id", "user", getUser());
+                            spinner.setAdapter(new ArrayAdapter<String>(context,
+                                    android.R.layout.simple_spinner_dropdown_item, dbHelper.select(dbHelper, "user", "name")));
+                            spinner.setSelection(getUser() - 1);
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    builder.show();
+
+                }
+            });
+            imgProfile = (ImageView) view.findViewById(R.id.profile_image);
+            imgProfile.setClickable(true);
+            imgProfile.setImageResource(Integer.parseInt(dbHelper.select(dbHelper, "user", "image", "where id=" + getUser())));
+            imgProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Dialog d = new Dialog(context);
+                    d.setTitle("Choose a new image");
+                    LinearLayout layout = new LinearLayout(context);
+                    layout.setOrientation(LinearLayout.HORIZONTAL);
+// Set up the input
+                    String[] images = dbHelper.select(dbHelper, "image", "source");
+                    for (int i = 0; i < images.length; i += 3) {
+                        LinearLayout layout_v = new LinearLayout(context);
+                        layout_v.setOrientation(LinearLayout.VERTICAL);
+                        for (int j = 0; j < 3; j++) {
+                            if ((i + j) != images.length) {
+                                final ImageView input2 = new ImageView(context);
+                                final int source = Integer.parseInt(images[i + j]);
+                                input2.setImageResource(source);
+                                input2.setMinimumHeight(275);
+                                input2.setMinimumWidth(275);
+                                input2.setClickable(true);
+                                input2.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        dbHelper.update_where(dbHelper, "" + source, "image", "id", "user", getUser());
+                                        imgProfile.setImageResource(source);
+                                        d.dismiss();
+                                    }
+                                });
+
+                                layout_v.addView(input2);
+                            }
+
+                        }
+                        layout.addView(layout_v);
+                    }
 
 
-                d.setContentView(layout);
-                d.show();
+                    d.setContentView(layout);
+                    d.show();
 
-            }
-        });
+                }
+            });
+        }
         return view;
     }
 
@@ -411,7 +411,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
     private int getUser()
     {
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        int savedText = sharedPref.getInt("Current User",228);
+        int savedText = sharedPref.getInt("Current User",0);
        return savedText;
     }
     private void setUser(int value)

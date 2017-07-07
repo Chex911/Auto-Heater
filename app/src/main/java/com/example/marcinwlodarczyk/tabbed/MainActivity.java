@@ -1,10 +1,12 @@
 package com.example.marcinwlodarczyk.tabbed;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
@@ -22,8 +24,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.IOException;
 
 import layout.SubPage01;
 import layout.SubPage02;
@@ -59,17 +64,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
 
-//        try {
-//            conn = new bluetoothManager(this);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-
-//        }
+        try {
+            conn = new bluetoothManager(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // устанавливаем переключатель программно в значение ON
        // mSwitch.setChecked(true);
@@ -102,10 +104,12 @@ public class MainActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
        // permissions();
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         dbHelper = new DBHelper(this);
+        mViewPager.setCurrentItem(1);
 
 
     }
@@ -192,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
         dbHelper.insert(dbHelper,str12,"user");
         dbHelper.insert(dbHelper,str13,"user");
         dbHelper.insert(dbHelper,str14,"user");
+        setUser(1);
     }
 
 
@@ -290,6 +295,19 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
-
+    private int getUser()
+    {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        int savedText = sharedPref.getInt("Current User",0);
+        return savedText;
+    }
+    private void setUser(int value)
+    {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("Current User",value);
+        editor.commit();
+        Log.d(TAG,"New Current User: "+value);
+    }
 }
 

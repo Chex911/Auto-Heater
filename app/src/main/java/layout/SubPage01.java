@@ -54,6 +54,7 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
     public static SubPage01 newInstance(String param1, String param2) {
         SubPage01 fragment = new SubPage01();
         Bundle args = new Bundle();
+
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
@@ -149,7 +150,7 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
     private int getUser()
     {
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        int savedText = sharedPref.getInt("Current User",228);
+        int savedText = sharedPref.getInt("Current User",0);
         return savedText;
     }
 }
