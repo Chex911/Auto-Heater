@@ -14,21 +14,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.example.marcinwlodarczyk.tabbed.DBHelper;
 import com.example.marcinwlodarczyk.tabbed.R;
 import com.example.marcinwlodarczyk.tabbed.bluetooth_atask_conn;
-
-import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +47,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
     Button PrButton2;
     Button EditButton;
     Context context;
+    ImageView imgProfile;
     Button ManConn;
     View view;
     private static final String TAG = "SubPage3";
@@ -295,7 +296,29 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
 
             }
         });
+        imgProfile = (ImageView) view.findViewById(R.id.profile_image);
+        imgProfile.setClickable(true);
+        imgProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "Entered onClick method");
+                final Dialog d = new Dialog(context);
+                LinearLayout layout = new LinearLayout(context);
 
+// Set up the input
+                final ImageView input2 = new ImageView(context);
+                input2.setImageResource(R.mipmap.beer);
+                final ImageView input = new ImageView(context);
+                input.setImageResource(R.mipmap.flower);
+
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                layout.addView(input);
+                layout.addView(input2);
+                d.setContentView(layout);
+                d.show();
+
+            }
+        });
         return view;
     }
 

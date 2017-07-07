@@ -23,11 +23,12 @@
                 android:layout_weight="0.4" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/profile_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.4"
-                app:srcCompat="@drawable/round_btn_on" />
+                android:layout_height="125dp"
+                android:minHeight="19dp"
+                android:minWidth="19dp"
+                app:srcCompat="@mipmap/beer" />
 
             <Space
                 android:layout_width="match_parent"

@@ -49,32 +49,32 @@ public class bluetoothManager{
 //         sts=(ImageView) activityContext.findViewById(R.id.conn_status);
 //         sts.setColorFilter(Color.parseColor("#ff0000"));
         connect();
-        h = new Handler() {
-            public void handleMessage(android.os.Message msg) {
-                switch (msg.what) {
-                    case RECIEVE_MESSAGE:                                                   // если приняли сообщение в Handler
-                        byte[] readBuf = (byte[]) msg.obj;
-                        String strIncom = new String(readBuf, 0, msg.arg1);
-                        sb.append(strIncom);                                                // формируем строку
-                        int endOfLineIndex = sb.indexOf("\r\n");                            // определяем символы конца строки
-                        if (endOfLineIndex > 0) {                                            // если встречаем конец строки,
-                            String sbprint = sb.substring(0, endOfLineIndex);               // то извлекаем строку
-                            sb.delete(0, sb.length());                                      // и очищаем sb
-                            Log.d("TEST", "ODPOWIEDZ OD ARDUINO: -----> "+ sbprint);
-                            if(txtArduino != null) {
-                                //txtArduino = (TextView) fragment_01.findViewById(R.id.txtArduino);
-                                txtArduino.setText(sbprint);
-
-                            }
-
-                            //txtArduino.setText("Ответ от Arduino: " + sbprint);             // обновляем TextViewtm
-                        }
-
-                        //Log.d(TAG, "...Строка:"+ sb.toString() +  "Байт:" + msg.arg1 + "...");
-                        break;
-                }
-            };
-        };
+//        h = new Handler() {
+//            public void handleMessage(android.os.Message msg) {
+//                switch (msg.what) {
+//                    case RECIEVE_MESSAGE:                                                   // если приняли сообщение в Handler
+//                        byte[] readBuf = (byte[]) msg.obj;
+//                        String strIncom = new String(readBuf, 0, msg.arg1);
+//                        sb.append(strIncom);                                                // формируем строку
+//                        int endOfLineIndex = sb.indexOf("\r\n");                            // определяем символы конца строки
+//                        if (endOfLineIndex > 0) {                                            // если встречаем конец строки,
+//                            String sbprint = sb.substring(0, endOfLineIndex);               // то извлекаем строку
+//                            sb.delete(0, sb.length());                                      // и очищаем sb
+//                            Log.d("TEST", "ODPOWIEDZ OD ARDUINO: -----> "+ sbprint);
+//                            if(txtArduino != null) {
+//                                //txtArduino = (TextView) fragment_01.findViewById(R.id.txtArduino);
+//                                txtArduino.setText(sbprint);
+//
+//                            }
+//
+//                            //txtArduino.setText("Ответ от Arduino: " + sbprint);             // обновляем TextViewtm
+//                        }
+//
+//                        //Log.d(TAG, "...Строка:"+ sb.toString() +  "Байт:" + msg.arg1 + "...");
+//                        break;
+//                }
+//            };
+//        };
 
 
     }
