@@ -223,7 +223,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
           });
 
         spinner = (Spinner) view.findViewById(R.id.user_spinner);
-        spinner.setSelection(getUser());
+
         spinner.setAdapter(new ArrayAdapter<String>(context,
                 android.R.layout.simple_spinner_dropdown_item, dbHelper.select(dbHelper,"user","name")));
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -240,11 +240,13 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
                 temmpp.setText(dbHelper.select(dbHelper,"user","temp","WHERE id="+getUser())+" °C");
                 swtemp.setChecked(dbHelper.select(dbHelper,"user","temp_bool","WHERE id="+getUser()).equals("1"));
                 swtime.setChecked(dbHelper.select(dbHelper,"user","time_bool","WHERE id="+getUser()).equals("1"));
+                imgProfile.setImageResource(Integer.parseInt(dbHelper.select(dbHelper,"user","image","where id="+getUser())));
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
+        spinner.setSelection(getUser()-1);
         swtemp= (Switch) view.findViewById(R.id.switch_temp);
         swtemp.setChecked(dbHelper.select(dbHelper,"user","temp_bool","WHERE id="+getUser()).equals("1"));
         swtemp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -283,6 +285,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
                         dbHelper.update_where(dbHelper,input.getText().toString(),"name","id","user",getUser());
                         spinner.setAdapter(new ArrayAdapter<String>(context,
                                 android.R.layout.simple_spinner_dropdown_item, dbHelper.select(dbHelper,"user","name")));
+                        spinner.setSelection(getUser()-1);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -298,22 +301,49 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
         });
         imgProfile = (ImageView) view.findViewById(R.id.profile_image);
         imgProfile.setClickable(true);
+        if(dbHelper.select(dbHelper,"user","image","where id="+getUser())!=null)
+        imgProfile.setImageResource(Integer.parseInt(dbHelper.select(dbHelper,"user","image","where id="+getUser())));
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "Entered onClick method");
                 final Dialog d = new Dialog(context);
+                d.setTitle("Choose a new image");
                 LinearLayout layout = new LinearLayout(context);
-
+                layout.setOrientation(LinearLayout.HORIZONTAL);
 // Set up the input
-                final ImageView input2 = new ImageView(context);
-                input2.setImageResource(R.mipmap.beer);
-                final ImageView input = new ImageView(context);
-                input.setImageResource(R.mipmap.flower);
+                String[] images= dbHelper.select(dbHelper,"image","source");
+                for(int i=0;i<images.length;i+=3)
+                {
+                    LinearLayout layout_v = new LinearLayout(context);
+                    layout_v.setOrientation(LinearLayout.VERTICAL);
+                    for(int j=0;j<3;j++){
+                        if((i+j)!=images.length) {
+                            final ImageView input2 = new ImageView(context);
+                            final int source =Integer.parseInt(images[i + j]);
+                            input2.setImageResource(source);
+                            input2.setMinimumHeight(275);
+                            input2.setMinimumWidth(275);
+                            input2.setClickable(true);
+                            input2.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                layout.addView(input);
-                layout.addView(input2);
+                                    dbHelper.update_where(dbHelper,""+source,"image","id","user",getUser());
+                                    imgProfile.setImageResource(source);
+
+                                    d.dismiss();
+                                }
+                            });
+
+                            layout_v.addView(input2);
+                        }
+
+                    }
+                        layout.addView(layout_v);
+                }
+
+
+
                 d.setContentView(layout);
                 d.show();
 
@@ -390,6 +420,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("Current User",value);
         editor.commit();
+        Log.d(TAG,"New Current User: "+value);
     }
 
 }

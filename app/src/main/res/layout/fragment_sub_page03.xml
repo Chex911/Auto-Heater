@@ -17,23 +17,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.4" />
-
             <ImageView
                 android:id="@+id/profile_image"
                 android:layout_width="match_parent"
                 android:layout_height="125dp"
                 android:minHeight="19dp"
                 android:minWidth="19dp"
-                app:srcCompat="@mipmap/beer" />
+                app:srcCompat="@mipmap/macos" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.4" />
         </LinearLayout>
 
 

@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     DBHelper dbHelper;
     boolean flag = false;
     TextView txtArduino;
-    static Dialog d;
+
     private BluetoothAdapter myBluetooth = null;
     //ImageView staus = (ImageView) findViewById(R.id.conn_status);
 
@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        } catch (IOException e) {
 //            e.printStackTrace();
+
 //        }
 
         // устанавливаем переключатель программно в значение ON
@@ -101,12 +102,7 @@ public class MainActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        premissions();
-
-
-
-
-
+       // permissions();
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         dbHelper = new DBHelper(this);
@@ -123,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, getIntent());
         if(resultCode==RESULT_OK && requestCode==1){
-            new bluetooth_atask_conn().execute(); //Call the class to connect;
+            //new bluetooth_atask_conn().execute(); //Call the class to connect;
         }
         else{
             Log.d("TAG","DENY");
@@ -132,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClickBT(View v) {
-        premissions();
+        permissions();
         txtArduino = (TextView) findViewById(R.id.txtArduino);
         //conn.setView(txtArduino);
 //        if (v.getId() == R.id.manual_con) {
@@ -163,11 +159,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickInsert(View v) {
-        String [][] str = {{"date","20 jun"},{"time","25"},{"temperature","18"}};
-        String [][] str1 = {{"name","User1"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"}};
-        dbHelper.insert(dbHelper,str,"statistic");
-        dbHelper.insert(dbHelper,str1,"user");
+//        String [][] str = {{"date","20 jun"},{"time","25"},{"temperature","18"}};
+//        String [][] str1 = {{"name","User1"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"}};
+//        dbHelper.insert(dbHelper,str,"statistic");
+//        dbHelper.insert(dbHelper,str1,"user");
+        String [][] str1 = {{"name","apple"},{"source",""+R.mipmap.apple}};
+        String [][] str2 = {{"name","diamond"},{"source",""+R.mipmap.diamond}};
+        String [][] str3= {{"name","flash"},{"source",""+R.mipmap.flash}};
+        String [][] str4 = {{"name","guitar"},{"source",""+R.mipmap.guitar}};
+        String [][] str5= {{"name","gentleman"},{"source",""+R.mipmap.gentleman}};
+        String [][] str6 = {{"name","love"},{"source",""+R.mipmap.love}};
+        String [][] str7= {{"name","macos"},{"source",""+R.mipmap.macos}};
+        String [][] str8 = {{"name","meter"},{"source",""+R.mipmap.meter}};
+        String [][] str9= {{"name","skull"},{"source",""+R.mipmap.skull}};
+        String [][] str10= {{"name","User1"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"},{"image",""+R.mipmap.macos}};
+        String [][] str11= {{"name","User2"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"},{"image",""+R.mipmap.macos}};
+        String [][] str12= {{"name","User3"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"},{"image",""+R.mipmap.macos}};
+        String [][] str14= {{"name","User4"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"},{"image",""+R.mipmap.macos}};
+        String [][] str13= {{"name","User5"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"},{"image",""+R.mipmap.macos}};
 
+        dbHelper.insert(dbHelper,str1,"image");
+        dbHelper.insert(dbHelper,str2,"image");
+        dbHelper.insert(dbHelper,str3,"image");
+        dbHelper.insert(dbHelper,str4,"image");
+        dbHelper.insert(dbHelper,str5,"image");
+        dbHelper.insert(dbHelper,str6,"image");
+        dbHelper.insert(dbHelper,str7,"image");
+        dbHelper.insert(dbHelper,str8,"image");
+        dbHelper.insert(dbHelper,str9,"image");
+        dbHelper.insert(dbHelper,str10,"user");
+        dbHelper.insert(dbHelper,str11,"user");
+        dbHelper.insert(dbHelper,str12,"user");
+        dbHelper.insert(dbHelper,str13,"user");
+        dbHelper.insert(dbHelper,str14,"user");
     }
 
 
@@ -179,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-    public void premissions(){
+    public void permissions(){
         myBluetooth = BluetoothAdapter.getDefaultAdapter();
         if(myBluetooth == null)
         {

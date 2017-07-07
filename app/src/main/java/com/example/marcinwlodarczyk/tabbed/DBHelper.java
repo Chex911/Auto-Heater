@@ -88,7 +88,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.update(database,cv,where + "=" + current,null);
         dbHelper.close();
-        Log.d(TAG,"Molodec:)");
+        Log.d(TAG,"Update "+params+" to "+new_value);
     }
 
     @Override
