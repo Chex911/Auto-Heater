@@ -66,37 +66,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        try {
-            conn = new bluetoothManager(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // устанавливаем переключатель программно в значение ON
-       // mSwitch.setChecked(true);
-        // добавляем слушателя
-//        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //
-//                                               @Override
-//                                               public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                                                   // в зависимости от значения isChecked выводим нужное сообщение
-//                                                   if (isChecked) {
-//                                                      //dbHelper.update_where("1","temp_bool","id","user","1");
-//                                                       Log.d(TAG,"Switch ON");
-//
-//                                                   } else {
-//                                                      // dbHelper.update_where("0","temp_bool","id","user","1");
-//                                                       Log.d(TAG,"Switch OFF");
-//                                                   }
-//                                               }
-//                                           }
-//    );
-
-        // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // setSupportActionBar(toolbar);
-
-
+//        try {
+//            conn = new bluetoothManager(this);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -105,12 +80,12 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-       // permissions();
+        permissions();
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         dbHelper = new DBHelper(this);
         mViewPager.setCurrentItem(1);
-
+        firstRun();
 
     }
 
@@ -123,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, getIntent());
         if(resultCode==RESULT_OK && requestCode==1){
-            //new bluetooth_atask_conn().execute(); //Call the class to connect;
+            new bluetooth_atask_conn().execute(); //Call the class to connect;
         }
         else{
             Log.d("TAG","DENY");
@@ -167,36 +142,7 @@ public class MainActivity extends AppCompatActivity {
 //        String [][] str1 = {{"name","User1"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"}};
 //        dbHelper.insert(dbHelper,str,"statistic");
 //        dbHelper.insert(dbHelper,str1,"user");
-        String [][] str1 = {{"name","apple"},{"source",""+R.mipmap.apple}};
-        String [][] str2 = {{"name","diamond"},{"source",""+R.mipmap.diamond}};
-        String [][] str3= {{"name","flash"},{"source",""+R.mipmap.flash}};
-        String [][] str4 = {{"name","guitar"},{"source",""+R.mipmap.guitar}};
-        String [][] str5= {{"name","gentleman"},{"source",""+R.mipmap.gentleman}};
-        String [][] str6 = {{"name","love"},{"source",""+R.mipmap.love}};
-        String [][] str7= {{"name","macos"},{"source",""+R.mipmap.macos}};
-        String [][] str8 = {{"name","meter"},{"source",""+R.mipmap.meter}};
-        String [][] str9= {{"name","skull"},{"source",""+R.mipmap.skull}};
-        String [][] str10= {{"name","User1"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"},{"image",""+R.mipmap.macos}};
-        String [][] str11= {{"name","User2"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"},{"image",""+R.mipmap.macos}};
-        String [][] str12= {{"name","User3"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"},{"image",""+R.mipmap.macos}};
-        String [][] str14= {{"name","User4"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"},{"image",""+R.mipmap.macos}};
-        String [][] str13= {{"name","User5"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"},{"image",""+R.mipmap.macos}};
 
-        dbHelper.insert(dbHelper,str1,"image");
-        dbHelper.insert(dbHelper,str2,"image");
-        dbHelper.insert(dbHelper,str3,"image");
-        dbHelper.insert(dbHelper,str4,"image");
-        dbHelper.insert(dbHelper,str5,"image");
-        dbHelper.insert(dbHelper,str6,"image");
-        dbHelper.insert(dbHelper,str7,"image");
-        dbHelper.insert(dbHelper,str8,"image");
-        dbHelper.insert(dbHelper,str9,"image");
-        dbHelper.insert(dbHelper,str10,"user");
-        dbHelper.insert(dbHelper,str11,"user");
-        dbHelper.insert(dbHelper,str12,"user");
-        dbHelper.insert(dbHelper,str13,"user");
-        dbHelper.insert(dbHelper,str14,"user");
-        setUser(1);
     }
 
 
@@ -295,19 +241,57 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
-    private int getUser()
+    public void firstRun()
+    {
+        if(getUser("First run")==0)
+        {
+            String [][] str1 = {{"name","apple"},{"source",""+R.mipmap.apple}};
+            String [][] str2 = {{"name","diamond"},{"source",""+R.mipmap.diamond}};
+            String [][] str3= {{"name","flash"},{"source",""+R.mipmap.flash}};
+            String [][] str4 = {{"name","guitar"},{"source",""+R.mipmap.guitar}};
+            String [][] str5= {{"name","gentleman"},{"source",""+R.mipmap.gentleman}};
+            String [][] str6 = {{"name","love"},{"source",""+R.mipmap.love}};
+            String [][] str7= {{"name","macos"},{"source",""+R.mipmap.macos}};
+            String [][] str8 = {{"name","meter"},{"source",""+R.mipmap.meter}};
+            String [][] str9= {{"name","skull"},{"source",""+R.mipmap.skull}};
+            String [][] str10= {{"name","Profile 1"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
+            String [][] str11= {{"name","Profile 2"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
+            String [][] str12= {{"name","Profile 3"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
+            String [][] str13= {{"name","Profile 4"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
+            String [][] str14= {{"name","Profile 5"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
+
+            dbHelper.insert(dbHelper,str1,"image");
+            dbHelper.insert(dbHelper,str2,"image");
+            dbHelper.insert(dbHelper,str3,"image");
+            dbHelper.insert(dbHelper,str4,"image");
+            dbHelper.insert(dbHelper,str5,"image");
+            dbHelper.insert(dbHelper,str6,"image");
+            dbHelper.insert(dbHelper,str7,"image");
+            dbHelper.insert(dbHelper,str8,"image");
+            dbHelper.insert(dbHelper,str9,"image");
+            dbHelper.insert(dbHelper,str10,"user");
+            dbHelper.insert(dbHelper,str11,"user");
+            dbHelper.insert(dbHelper,str12,"user");
+            dbHelper.insert(dbHelper,str13,"user");
+            dbHelper.insert(dbHelper,str14,"user");
+            setUser(1,"Current User");
+            setUser(1,"First run");
+
+        }
+    }
+    private int getUser(String key)
     {
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        int savedText = sharedPref.getInt("Current User",0);
+        int savedText = sharedPref.getInt(key,0);
         return savedText;
     }
-    private void setUser(int value)
+    private void setUser(int value,String key)
     {
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt("Current User",value);
+        editor.putInt(key,value);
         editor.commit();
-        Log.d(TAG,"New Current User: "+value);
+        Log.d(TAG,"New "+key+" : "+value);
     }
 }
 
