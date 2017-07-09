@@ -30,14 +30,14 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/btnPrev"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Previous" />
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/btnNext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -60,7 +60,7 @@
                         android:id="@+id/textView1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
+                        android:layout_weight="0.01"
                         android:text="Energy"
                         android:textSize="25sp" />
 
@@ -85,7 +85,7 @@
                         android:id="@+id/textView2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
+                        android:layout_weight="0.01"
                         android:text="Time"
                         android:textSize="25sp" />
 
@@ -118,7 +118,7 @@
                         android:id="@+id/textView3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
+                        android:layout_weight="0.01"
                         android:text="Date"
                         android:textSize="25sp" />
 
@@ -143,7 +143,7 @@
                         android:id="@+id/textView4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
+                        android:layout_weight="0.01"
                         android:text="Temperature"
                         android:textSize="25sp" />
 

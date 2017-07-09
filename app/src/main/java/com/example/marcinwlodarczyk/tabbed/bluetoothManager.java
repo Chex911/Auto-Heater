@@ -1,4 +1,5 @@
 package com.example.marcinwlodarczyk.tabbed;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 import static android.content.ContentValues.TAG;
 
@@ -19,6 +21,7 @@ public class bluetoothManager{
 
     public Handler h;
     public TextView txtArduino;
+    public TextView timeArduino;
     private Conn_info info = null;
 
     final int RECIEVE_MESSAGE = 1;
@@ -33,29 +36,39 @@ public class bluetoothManager{
     public bluetoothManager(final Activity activityContext, Conn_info info) throws IOException {
         this.activityContext = activityContext;
         this.info = info;
-        //txtArduino = (TextView) activityContext.findViewById(R.id.txtArduino);
+        txtArduino = (TextView) activityContext.findViewById(R.id.txtArduino);
+        timeArduino = (TextView) activityContext.findViewById(R.id.timeArduino);
 
         h = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 switch (msg.what) {
-                    case RECIEVE_MESSAGE:                                                   // если приняли сообщение в Handler
+                    case RECIEVE_MESSAGE:                                             // если приняли сообщение в Handler
                         byte[] readBuf = (byte[]) msg.obj;
                         String strIncom = new String(readBuf, 0, msg.arg1);
-                        sb.append(strIncom);                                                // формируем строку
-                        int endOfLineIndex = sb.indexOf("\r\n");                            // определяем символы конца строки
-                        if (endOfLineIndex > 0) {                                            // если встречаем конец строки,
-                            String sbprint = sb.substring(0, endOfLineIndex);               // то извлекаем строку
-                            sb.delete(0, sb.length());
-                            //Log.d("TEST", "ODPOWIEDZ OD ARDUINO: -----> "+ sbprint); // и очищаем sb
-                            Arduino.obtainSignal(sbprint);
-
-                            if(txtArduino != null) {
-                                //txtArduino = (TextView) fragment_01.findViewById(R.id.txtArduino);
-                                txtArduino.setText(sbprint);
-                            }
-
-                            //txtArduino.setText("Ответ от Arduino: " + sbprint);             // обновляем TextViewtm
+                        String[] signal = Arduino.obtainSignal(strIncom);
+                        if(txtArduino != null) {
+                            txtArduino.setText(signal[0]);
                         }
+                        if(timeArduino != null) {
+                            timeArduino.setText(signal[1]);
+                        }
+
+//
+//                        sb.append(strIncom);                                                // формируем строку
+//                        int endOfLineIndex = sb.indexOf("\r\n");                            // определяем символы конца строки
+//                        if (endOfLineIndex > 0) {                                            // если встречаем конец строки,
+//                            String sbprint = sb.substring(0, endOfLineIndex);               // то извлекаем строку
+//                            sb.delete(0, sb.length());
+//                            //Log.d("TEST", "ODPOWIEDZ OD ARDUINO: -----> "+ sbprint); // и очищаем sb
+//                            Arduino.obtainSignal(sbprint);
+//
+//                            if(txtArduino != null) {
+//                                //txtArduino = (TextView) fragment_01.findViewById(R.id.txtArduino);
+//                                txtArduino.setText(sbprint);
+//                            }
+//
+//                            //txtArduino.setText("Ответ от Arduino: " + sbprint);             // обновляем TextViewtm
+//                        }
                         //Log.d(TAG, "...Строка:"+ sb.toString() +  "Байт:" + msg.arg1 + "...");
                         break;
                 }
@@ -88,8 +101,10 @@ public class bluetoothManager{
 //    }
 
     public void sendData(Arduino a){
-        //mConnectedThread.write(a.getMessage());
-        mConnectedThread.write("300");
+        int result = ByteBuffer.wrap(a.getBytes()).getInt();
+        Log.d("sendData()", "message prepared: "+result);
+        mConnectedThread.write(a.getBytes());
+        //mConnectedThread.write("300");
     }
 
     private void errorExit(String title, String message){
@@ -143,13 +158,15 @@ public class bluetoothManager{
         }
 
         /* Call this from the main activity to send data to the remote device */
-        public void write(String message) {
+        public void write(byte[] message) {
             //Log.d(TAG, "...Данные для отправки: " + message + "...");
             //byte[] msgBuffer = message.getBytes();
-            int msgBuffer = Integer.parseInt(message);
+            //int msgBuffer = Integer.parseInt(message);
             Log.d(TAG, "I am going to write message");
             try {
-                mmOutStream.write(msgBuffer);
+                //byte[] bytes = ByteBuffer.allocate(4).putInt().array();
+                byte[] bytes = new byte[]{1,00,01};
+                mmOutStream.write(bytes);
             } catch (IOException e) {
                 Log.d(TAG, "Write message error" + e.getMessage() + "...");
             }

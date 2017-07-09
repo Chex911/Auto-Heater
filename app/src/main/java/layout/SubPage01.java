@@ -22,6 +22,7 @@ import com.example.marcinwlodarczyk.tabbed.MainActivity;
 import com.example.marcinwlodarczyk.tabbed.R;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.DataPointInterface;
@@ -53,6 +54,7 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
     private String mParam1;
     DBHelper dbHelper;
     Context context;
+    int centralIndex=3;
     private String mParam2;
     private OnFragmentInteractionListener mListener;
 
@@ -102,13 +104,40 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_sub_page01, container, false);
-        TextView txt_date=(TextView) view.findViewById(R.id.txt_date);
-        txt_date.setText(correctDate(dbHelper.select(dbHelper,"statistic","date","where id=1")));
-        TextView txt_time=(TextView) view.findViewById(R.id.txt_time);
-        txt_time.setText(dbHelper.select(dbHelper,"statistic","time","where id=1")+" m");
-        TextView txt_temp=(TextView) view.findViewById(R.id.txt_temp);
-        txt_temp.setText(dbHelper.select(dbHelper,"statistic","temperature","where id=1")+" °C");
-        createGraph();
+        final TextView txt_date=(TextView) view.findViewById(R.id.txt_date);
+        final TextView txt_time=(TextView) view.findViewById(R.id.txt_time);
+        final TextView txt_temp=(TextView) view.findViewById(R.id.txt_temp);
+        final TextView txt_energy=(TextView) view.findViewById(R.id.txt_energy);
+        new Graph().createGraph();
+        new Graph().refreshInfo(txt_energy,txt_time,txt_date,txt_temp);
+        final Button btnNext = (Button) view.findViewById(R.id.btnNext);
+        final Button btnPrev = (Button) view.findViewById(R.id.btnPrev);
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnPrev.setEnabled(true);
+                centralIndex--;
+                new Graph().refreshGraph();
+                new Graph().createGraph();
+                new Graph().refreshInfo(txt_energy,txt_time,txt_date,txt_temp);
+                if(!checkLenght(true))
+                    btnNext.setEnabled(false);
+            }
+        });
+
+        btnPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnNext.setEnabled(true);
+                centralIndex++;
+                new Graph().refreshGraph();
+                new Graph().createGraph();
+                new Graph().refreshInfo(txt_energy,txt_time,txt_date,txt_temp);
+                if(!checkLenght(false))
+                    btnPrev.setEnabled(false);
+            }
+        });
+
         return view;
     }
 
@@ -175,116 +204,179 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
 
         // Required empty public constructor
     }
-    public String correctDate(String date)
-    {
-        String[] separated=date.split("-");
-            switch (separated[1]) {
-                case "01":
-                    date = "JAN";
-                    break;
-                case "02":
-                    date = "FEB";
-                    break;
-                case "03":
-                    date = "MAR";
-                    break;
-                case "04":
-                    date = "APR";
-                    break;
-                case "05":
-                    date = "MAY";
-                    break;
-                case "06":
-                    date = "JUN";
-                    break;
-                case "07":
-                    date = "JUL";
-                    break;
-                case "08":
-                    date = "AUG";
-                    break;
-                case "09":
-                    date = "SEP";
-                    break;
-                case "10":
-                    date = "OCT";
-                    break;
-                case "11":
-                    date = "NOV";
-                    break;
-                case "12":
-                    date = "DEC";
-                    break;
+    public class Graph{
+        GraphView graph = (GraphView) view.findViewById(R.id.graph);
+
+        private Graph(){
+        }
+        private void createGraph(){
+
+            String[]  dates=dbHelper.select(dbHelper,"statistic","date");
+            String centralDate=dates[dates.length-centralIndex];
+            double [] costs=findCost(dbHelper.select(dbHelper,"statistic","time"));
+            DataPoint[] dp=new DataPoint[5];
+            for (int i = 0; i<5 ; i++) {
+                try {
+                    String[] separated = dates[dates.length-centralIndex - 2 + i].split("-");
+                    dp[i] = new DataPoint(Double.parseDouble(separated[2]), costs[dates.length-centralIndex - 2 + i]);
+                }
+                catch (IndexOutOfBoundsException e)
+                {
+                    dp[i]= new DataPoint(0,0);
+                }
 
             }
-        return separated[2]+"-"+date;
-    }
-    private void createGraph(){
-        GraphView graph = (GraphView) view.findViewById(R.id.graph);
-        String[] dates=dbHelper.select(dbHelper,"statistic","date");
-        double [] costs=findCost(dbHelper.select(dbHelper,"statistic","time"));
-//
-//        graph.addSeries(series);
-//        Calendar calendar =Calendar.getInstance();
-//
-//        DataPoint[] dp=new DataPoint[6];
-//        for (int i = 0; i < dates.length||i<5 ; i++) {
-//            dp[i]=new DataPoint(i,costs[i]);
-//            calendar.add(Calendar.DATE, 1);
-//        }
-//        BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dp);
-        Calendar calendar = Calendar.getInstance();
-        Date d1 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d2 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d3 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d4 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d5 = calendar.getTime();
-        calendar.add(Calendar.DATE, 1);
-        Date d6 = calendar.getTime();
-
-        // you can directly pass Date objects to DataPoint-Constructor
-        // this will convert the Date to double via Date#getTime()
-        BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(d1, 1),
-                new DataPoint(d2, 2),
-                new DataPoint(d3, 8),
-                new DataPoint(d4, 5),
-                new DataPoint(d5, 9),
-        });
-        graph.addSeries(series);
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(graph.getContext()));
+            BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(dp);
+            graph.addSeries(series);
+//        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(graph.getContext()));
 //        graph.getGridLabelRenderer().setNumHorizontalLabels(7);
 //        graph.getGridLabelRenderer().setNumVerticalLabels(7);
-        graph.getViewport().setMinX(d1.getTime());
-        graph.getViewport().setMaxX(d6.getTime());
-        graph.getViewport().setXAxisBoundsManual(true);
-        series.setSpacing(10);
-//        series.setAnimated(true);
-//        graph.getViewport().setXAxisBoundsManual(true);
-//        graph.getViewport().setMinX(0);
-//        graph.getViewport().setMaxX(5);
-        graph.getViewport().setScalable(true);
+            //       graph.getViewport().setXAxisBoundsManual(true);
+            series.setSpacing(60);
+            if(dp[0].getX()==0){
+                graph.getViewport().setMinX(dp[4].getX()-4);
+                graph.getViewport().setMaxX(dp[4].getX());
+            }
+            if(dp[4].getX()==0){
+                graph.getViewport().setMinX(dp[0].getX());
+                graph.getViewport().setMaxX(dp[0].getX()+4);
+            }
+            graph.getViewport().setMinY(0);
+            graph.getViewport().setMaxY(getMaxY(costs));
+            Log.d("Checkai", graph.getViewport().getMinX(false)+" "+ graph.getViewport().getMaxX(false));
+            StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+            staticLabelsFormatter.setHorizontalLabels(setLabels(centralDate));
+            graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+//        graph.getViewport().setScalable(true);
 //        series.setOnDataPointTapListener(new OnDataPointTapListener() {
 //            @Override
 //            public void onTap(Series series, DataPointInterface dataPoint) {
 //                Toast.makeText(getActivity(), "Series1: On Data Point clicked: "+dataPoint, Toast.LENGTH_SHORT).show();
 //            }
 //        });
+        }
+        public void refreshGraph()
+        {
+            graph.removeAllSeries();
+        }
+        private double getMaxY(double[] costs)
+        {
+            double max=0;
+            for(int i=0;i<costs.length;i++)
+            {
+                if(costs[i]>max)
+                    max=costs[i];
+            }
+            Log.d("MAX COST",max+"");
+            return max;
+        }
+        private String[] setLabels(String centralDate)
+        {
+            String[] str= new String[5];
+            String[] separated=centralDate.split("-");
+            for (int i=0;i<5;i++){
+                int day=Integer.parseInt(separated[2])-2+i;
+                int month=Integer.parseInt(separated[1]);
+                if(day==0)
+                    str[i]=30+"/"+(month-1);
+                else
+                str[i]=day+"/"+month;
+            }
+            return str;
+        }
+        public void refreshInfo(TextView energy,TextView time,TextView date,TextView temperature)
+        {
+            String[] dates=dbHelper.select(dbHelper,"statistic","date");
+            double [] costs=findCost(dbHelper.select(dbHelper,"statistic","time"));
+            String[] times=dbHelper.select(dbHelper,"statistic","time");
+            String[] temperatures=dbHelper.select(dbHelper,"statistic","temperature");
+            energy.setText(""+costs[dates.length-centralIndex]+" €");
+            time.setText(times[dates.length-centralIndex]+" m");
+            date.setText(correctDate(dates[dates.length-centralIndex]));
+            temperature.setText(temperatures[dates.length-centralIndex]+" °C");
+
+        }
+        private double[] findCost(String[] time)
+        {
+            DecimalFormat df = new DecimalFormat("#.###");
+            double[] cost = new double[time.length];
+            for(int i=0;i<time.length;i++)
+            {
+                cost[i]=Double.parseDouble(time[i]);
+                cost[i]=cost[i]/60*1.8*0.25;
+                cost[i]= Double.parseDouble(df.format(cost[i]));
+            }
+            return cost;
+        }
+
+
     }
-    private double[] findCost(String[] time)
+    public String correctDate(String date)
     {
-        DecimalFormat df = new DecimalFormat("#.###");
-        double[] cost = new double[time.length];
-       for(int i=0;i<time.length;i++)
-       {
-           cost[i]=Double.parseDouble(time[i]);
-           cost[i]=cost[i]/60*1.8*0.17;
-           cost[i]= Double.parseDouble(df.format(cost[i]));
-       }
-       return cost;
+        String[] separated=date.split("-");
+        switch (separated[1]) {
+            case "01":
+                date = "JAN";
+                break;
+            case "02":
+                date = "FEB";
+                break;
+            case "03":
+                date = "MAR";
+                break;
+            case "04":
+                date = "APR";
+                break;
+            case "05":
+                date = "MAY";
+                break;
+            case "06":
+                date = "JUN";
+                break;
+            case "07":
+                date = "JUL";
+                break;
+            case "08":
+                date = "AUG";
+                break;
+            case "09":
+                date = "SEP";
+                break;
+            case "10":
+                date = "OCT";
+                break;
+            case "11":
+                date = "NOV";
+                break;
+            case "12":
+                date = "DEC";
+                break;
+
+        }
+        return separated[2]+"-"+date;
     }
+    public boolean checkLenght(boolean button)
+    {
+        String[] date = dbHelper.select(dbHelper,"statistic","date");
+        if (button) {
+            if (date.length - centralIndex > date.length - 2) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        if(!button){
+            if (date.length - centralIndex <1) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+
 }

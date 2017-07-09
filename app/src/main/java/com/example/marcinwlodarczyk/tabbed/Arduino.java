@@ -2,6 +2,8 @@ package com.example.marcinwlodarczyk.tabbed;
 
 import android.util.Log;
 
+import java.nio.ByteBuffer;
+
 /**
  * Created by marcinwlodarczyk on 08.07.2017.
  */
@@ -9,6 +11,7 @@ import android.util.Log;
 public class Arduino {
     private static final String TAG = "Arduino";
     private  String message = "10000";
+    private byte[] bytes = null;
 
 
     public Arduino(){
@@ -16,16 +19,15 @@ public class Arduino {
     }
 
     public static String[] obtainSignal(String s){
-        String[] output = new String[2];
-        if(s.length() == 4) {
-            Log.d(TAG,"obtainSignal()            ----> "+s);
-            output[0] = s.substring(0, 2); // Time of work
-            output[1] = s.substring(2, 4); // Temperature
-            Log.d(TAG,"obtainSignal(Time)        ----> "+output[0]);
-            Log.d(TAG,"obtainSignal(Temperature) ----> "+output[1]);
+        String[] output;
+        if(s.length() > 6) {
+            Log.d(TAG,"obtainSignal() ----> "+s);
+            output = s.split(",");
+            output[0] += " °C";
+            output[1] =output[1].substring(0,2)+" m";
             return output;
         }
-        return new String[] {"000","00"};
+        return new String[] {"00 °C","00 m"};
     }
 
     public void sendSignal(String... s){
@@ -66,10 +68,16 @@ public class Arduino {
         }
 
         this.message = output;
+        int tmp = Integer.parseInt(output);
+        bytes = ByteBuffer.allocate(4).putInt(tmp).array();
 
     }
 
     public String getMessage(){
         return message;
+    }
+
+    public byte[] getBytes(){
+        return bytes;
     }
 }
