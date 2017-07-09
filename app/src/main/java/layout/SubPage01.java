@@ -277,8 +277,8 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
             for (int i=0;i<5;i++){
                 int day=Integer.parseInt(separated[2])-2+i;
                 int month=Integer.parseInt(separated[1]);
-                if(day==0)
-                    str[i]=30+"/"+(month-1);
+                if(day<=0)
+                    str[i]=(29+i)+"/"+(month-1);
                 else
                 str[i]=day+"/"+month;
             }
@@ -298,7 +298,7 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
         }
         private double[] findCost(String[] time)
         {
-            DecimalFormat df = new DecimalFormat("#.###");
+            DecimalFormat df = new DecimalFormat("#.##");
             double[] cost = new double[time.length];
             for(int i=0;i<time.length;i++)
             {
