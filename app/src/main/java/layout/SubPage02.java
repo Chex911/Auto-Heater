@@ -1,15 +1,14 @@
 package layout;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.example.marcinwlodarczyk.tabbed.DBHelper;
 import com.example.marcinwlodarczyk.tabbed.R;
 
 /**
@@ -25,11 +24,8 @@ public class SubPage02 extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    final int RECIEVE_MESSAGE = 1;
-    public Handler h;
-    private StringBuilder sb = new StringBuilder();
-    public TextView txtArduino;
-
+    DBHelper dbHelper;
+    Context context;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -70,36 +66,6 @@ public class SubPage02 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        Log.d("Handler", "CREATE");
-//        h = new Handler() {
-//            public void handleMessage(android.os.Message msg) {
-//                switch (msg.what) {
-//                    case RECIEVE_MESSAGE:                                                   // если приняли сообщение в Handler
-//                        byte[] readBuf = (byte[]) msg.obj;
-//                        String strIncom = new String(readBuf, 0, msg.arg1);
-//                        sb.append(strIncom);                                                // формируем строку
-//                        int endOfLineIndex = sb.indexOf("\r\n");                            // определяем символы конца строки
-//                        if (endOfLineIndex > 0) {                                            // если встречаем конец строки,
-//                            String sbprint = sb.substring(0, endOfLineIndex);               // то извлекаем строку
-//                            sb.delete(0, sb.length());                                      // и очищаем sb
-//                            Log.d("TEST", "ODPOWIEDZ OD ARDUINO: -----> "+ sbprint);
-//                            if(txtArduino != null) {
-//                                //txtArduino = (TextView) View.findViewById(R.id.txtArduino);
-//                                //txtArduino.setText(sbprint);
-//                            }
-//
-//                            //txtArduino.setText("Ответ от Arduino: " + sbprint);             // обновляем TextViewtm
-//                        }
-//
-//                        //Log.d(TAG, "...Строка:"+ sb.toString() +  "Байт:" + msg.arg1 + "...");
-//                        break;
-//                }
-//            };
-//        };
-
-
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sub_page02, container, false);
     }
@@ -141,5 +107,11 @@ public class SubPage02 extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    public void setContext(Context context,DBHelper dbHelper) {
+        this.context=context;
+        this.dbHelper=dbHelper;
+
+        // Required empty public constructor
     }
 }

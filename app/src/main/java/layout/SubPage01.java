@@ -8,13 +8,30 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.marcinwlodarczyk.tabbed.DBHelper;
+import com.example.marcinwlodarczyk.tabbed.MainActivity;
 import com.example.marcinwlodarczyk.tabbed.R;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
+import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
+
+import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +51,8 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
     private static final String TAG = "SubPage01";
     // TODO: Rename and change types of parameters
     private String mParam1;
+    DBHelper dbHelper;
+    Context context;
     private String mParam2;
     private OnFragmentInteractionListener mListener;
 
@@ -83,16 +102,13 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_sub_page01, container, false);
-//        mSwitch = (Switch) view.findViewById(R.id.switch_temp);
-//        mSwitch.setChecked(true);
-//        if (mSwitch != null) {
-//            mSwitch.setOnCheckedChangeListener(this);
-//        }
-
-//        MButton = (Button) view.findViewById(R.id.MainButton);
-//        MButton.setOnClickListener(this);
-        int i =getUser();
-        Log.d(TAG,"Current User sb_p1:"+i);
+        TextView txt_date=(TextView) view.findViewById(R.id.txt_date);
+        txt_date.setText(correctDate(dbHelper.select(dbHelper,"statistic","date","where id=1")));
+        TextView txt_time=(TextView) view.findViewById(R.id.txt_time);
+        txt_time.setText(dbHelper.select(dbHelper,"statistic","time","where id=1")+" m");
+        TextView txt_temp=(TextView) view.findViewById(R.id.txt_temp);
+        txt_temp.setText(dbHelper.select(dbHelper,"statistic","temperature","where id=1")+" °C");
+        createGraph();
         return view;
     }
 
@@ -152,5 +168,123 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         int savedText = sharedPref.getInt("Current User",0);
         return savedText;
+    }
+    public void setContext(Context context,DBHelper dbHelper) {
+        this.context=context;
+        this.dbHelper=dbHelper;
+
+        // Required empty public constructor
+    }
+    public String correctDate(String date)
+    {
+        String[] separated=date.split("-");
+            switch (separated[1]) {
+                case "01":
+                    date = "JAN";
+                    break;
+                case "02":
+                    date = "FEB";
+                    break;
+                case "03":
+                    date = "MAR";
+                    break;
+                case "04":
+                    date = "APR";
+                    break;
+                case "05":
+                    date = "MAY";
+                    break;
+                case "06":
+                    date = "JUN";
+                    break;
+                case "07":
+                    date = "JUL";
+                    break;
+                case "08":
+                    date = "AUG";
+                    break;
+                case "09":
+                    date = "SEP";
+                    break;
+                case "10":
+                    date = "OCT";
+                    break;
+                case "11":
+                    date = "NOV";
+                    break;
+                case "12":
+                    date = "DEC";
+                    break;
+
+            }
+        return separated[2]+"-"+date;
+    }
+    private void createGraph(){
+        GraphView graph = (GraphView) view.findViewById(R.id.graph);
+        String[] dates=dbHelper.select(dbHelper,"statistic","date");
+        double [] costs=findCost(dbHelper.select(dbHelper,"statistic","time"));
+//
+//        graph.addSeries(series);
+//        Calendar calendar =Calendar.getInstance();
+//
+//        DataPoint[] dp=new DataPoint[6];
+//        for (int i = 0; i < dates.length||i<5 ; i++) {
+//            dp[i]=new DataPoint(i,costs[i]);
+//            calendar.add(Calendar.DATE, 1);
+//        }
+//        BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dp);
+        Calendar calendar = Calendar.getInstance();
+        Date d1 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d2 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d3 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d4 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d5 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d6 = calendar.getTime();
+
+        // you can directly pass Date objects to DataPoint-Constructor
+        // this will convert the Date to double via Date#getTime()
+        BarGraphSeries<DataPoint> series = new BarGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(d1, 1),
+                new DataPoint(d2, 2),
+                new DataPoint(d3, 8),
+                new DataPoint(d4, 5),
+                new DataPoint(d5, 9),
+        });
+        graph.addSeries(series);
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(graph.getContext()));
+//        graph.getGridLabelRenderer().setNumHorizontalLabels(7);
+//        graph.getGridLabelRenderer().setNumVerticalLabels(7);
+        graph.getViewport().setMinX(d1.getTime());
+        graph.getViewport().setMaxX(d6.getTime());
+        graph.getViewport().setXAxisBoundsManual(true);
+        series.setSpacing(10);
+//        series.setAnimated(true);
+//        graph.getViewport().setXAxisBoundsManual(true);
+//        graph.getViewport().setMinX(0);
+//        graph.getViewport().setMaxX(5);
+        graph.getViewport().setScalable(true);
+//        series.setOnDataPointTapListener(new OnDataPointTapListener() {
+//            @Override
+//            public void onTap(Series series, DataPointInterface dataPoint) {
+//                Toast.makeText(getActivity(), "Series1: On Data Point clicked: "+dataPoint, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+    }
+    private double[] findCost(String[] time)
+    {
+        DecimalFormat df = new DecimalFormat("#.###");
+        double[] cost = new double[time.length];
+       for(int i=0;i<time.length;i++)
+       {
+           cost[i]=Double.parseDouble(time[i]);
+           cost[i]=cost[i]/60*1.8*0.17;
+           cost[i]= Double.parseDouble(df.format(cost[i]));
+       }
+       return cost;
     }
 }

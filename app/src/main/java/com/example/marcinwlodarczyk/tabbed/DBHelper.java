@@ -28,9 +28,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("create table  statistic ("
                 + "id integer primary key autoincrement,"
-                + "date text,"
-                + "time text,"
-                + "temperature text"
+                + "date date default (date('now')) ,"
+                + "time integer,"
+                + "temperature integer"
                 + ");");
 
         db.execSQL("create table  image ("
@@ -46,7 +46,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "time_bool integer,"
                 + "time text,"
                 + "image integer"
-//                    + "foreign key (image) references image(id)"
+//                   + "foreign key (image) references image(id)"
                 + ");");
 
     }

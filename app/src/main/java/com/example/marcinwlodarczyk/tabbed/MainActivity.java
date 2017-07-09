@@ -1,9 +1,14 @@
 package com.example.marcinwlodarczyk.tabbed;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,9 +17,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.NumberPicker;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,13 +36,10 @@ import layout.SubPage03;
 
 import static com.example.marcinwlodarczyk.tabbed.R.id.container;
 
-public class MainActivity extends AppCompatActivity implements AsyncResponse_info{
+public class MainActivity extends AppCompatActivity {
 
     public static bluetoothManager conn;
-
     private static final String TAG = "MyActivity";
-    bluetooth_atask_conn_info conn_info = new bluetooth_atask_conn_info();
-
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -52,16 +59,24 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
     TextView txtArduino;
 
     private BluetoothAdapter myBluetooth = null;
-
+    //ImageView staus = (ImageView) findViewById(R.id.conn_status);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//
+//        try {
+//            conn = new bluetoothManager(this);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-
+        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -83,8 +98,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, getIntent());
         if(resultCode==RESULT_OK && requestCode==1){
-            conn_info.delegate = this;
-          conn_info.execute();
+            new bluetooth_atask_conn().execute(); //Call the class to connect;
         }
         else{
             Log.d("TAG","DENY");
@@ -93,32 +107,45 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
 
 
     public void onClickBT(View v) {
-
-        txtArduino = (TextView) findViewById(R.id.txtArduino);
-
+        permissions();
+//        txtArduino = (TextView) findViewById(R.id.txtArduino);
+        //conn.setView(txtArduino);
+//        if (v.getId() == R.id.manual_con) {
+//            Log.d("TAG","DONE");
+//            new bluetooth_atask_conn().execute(); //Call the class to connect;
+//        }
        if (v.getId() == R.id.MainButton) {
 
-           Arduino stream = new Arduino();
-
-           if(!flag) {
-               stream.sendSignal("00", "00", "01");
-               conn.sendData(stream);
-           }else{
-               stream.sendSignal("00", "00", "01");
-               conn.sendData(stream);
-           }
-           flag = !flag;
-
-           // stream.sendSignal("01", "00", "20"); // temp ON time OFF
-           // stream.sendSignal("10", "00", "20"); // temp OFF time ON
-
-       }
+//           if (conn.getStatus()) {
+//                if (!flag) {
+//                    conn.sendData("227");
+//                } else {
+//                    conn.sendData("100");
+//                }
+//                flag = !flag;
+//            } else {
+//                conn.connect();
+//
+//                if (!flag) {
+//                    conn.sendData("1");
+//                } else {
+//                    conn.sendData("0");
+//                }
+//                flag = !flag;
+//            }
+        }
 
     }
 
-    public void onClickManual(View v) {
-        permissions();
+    public void onClickInsert(View v) {
+//        String [][] str = {{"date","20 jun"},{"time","25"},{"temperature","18"}};
+//        String [][] str1 = {{"name","User1"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"}};
+//        dbHelper.insert(dbHelper,str,"statistic");
+//        dbHelper.insert(dbHelper,str1,"user");
+
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -127,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
     public void permissions(){
         myBluetooth = BluetoothAdapter.getDefaultAdapter();
         if(myBluetooth == null)
@@ -146,10 +172,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
         }
         else
             {
-                bluetooth_atask_conn_info tmp = new bluetooth_atask_conn_info();
-                tmp.delegate = this;
-                tmp.execute();
-
+                new bluetooth_atask_conn().execute();
             }
     }
 
@@ -168,16 +191,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void processInfo_result(Conn_info output) {
-        Conn_info in = output;
 
-        try {
-            conn = new bluetoothManager(this,in);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     /**
@@ -195,9 +209,11 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
             switch (position){
                 case 0:
                     SubPage01 tab1 = new SubPage01();
+                    tab1.setContext(MainActivity.this,dbHelper);
                     return tab1;
                 case 1:
                     SubPage02 tab2 =new SubPage02();
+                    tab2.setContext(MainActivity.this,dbHelper);
                     return tab2;
                 case 2:
                     SubPage03 tab3 = new SubPage03();
@@ -245,6 +261,11 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
             String [][] str12= {{"name","Profile 3"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
             String [][] str13= {{"name","Profile 4"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
             String [][] str14= {{"name","Profile 5"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
+            String [][] str15= {{"date","2017-07-02"},{"time","10"},{"temperature","25"}};
+            String [][] str16= {{"date","2017-07-03"},{"time","20"},{"temperature","26"}};
+            String [][] str17= {{"date","2017-07-04"},{"time","30"},{"temperature","24"}};
+            String [][] str18= {{"date","2017-07-05"},{"time","40"},{"temperature","23"}};
+            String [][] str19= {{"date","2017-07-06"},{"time","50"},{"temperature","27"}};
 
             dbHelper.insert(dbHelper,str1,"image");
             dbHelper.insert(dbHelper,str2,"image");
@@ -260,6 +281,11 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
             dbHelper.insert(dbHelper,str12,"user");
             dbHelper.insert(dbHelper,str13,"user");
             dbHelper.insert(dbHelper,str14,"user");
+            dbHelper.insert(dbHelper,str15,"statistic");
+            dbHelper.insert(dbHelper,str16,"statistic");
+            dbHelper.insert(dbHelper,str17,"statistic");
+            dbHelper.insert(dbHelper,str18,"statistic");
+            dbHelper.insert(dbHelper,str19,"statistic");
             setUser(1,"Current User");
             setUser(1,"First run");
 

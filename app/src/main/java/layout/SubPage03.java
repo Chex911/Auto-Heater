@@ -160,6 +160,14 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
 
                 }
             });
+            Button testbtn=(Button) view.findViewById(R.id.test);
+            testbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dbHelper.insert(dbHelper, new String[][]{{"time", "20"}, {"temperature", "20"}}, "statistic");
+                    Log.d("Insert Date", "" + dbHelper.select(dbHelper, "statistic", "date"));
+                }
+                });
             PrButton2 = (Button) view.findViewById(R.id.btn_time);
             PrButton2.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -352,19 +360,6 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
 
         // Required empty public constructor
     }
-
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-
     @Override
     public void onDetach() {
         super.onDetach();
