@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -109,16 +110,27 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
     public void onClickBT(View v) {
 
         txtArduino = (TextView) findViewById(R.id.txtArduino);
-
+        Spinner sp_main=(Spinner) findViewById(R.id.spinner_main);
+        int user=sp_main.getSelectedItemPosition();
         if (v.getId() == R.id.MainButton) {
 
             Arduino stream = new Arduino();
 
             if(!flag) {
+                if(user==0)
                 stream.sendSignal("00", "00", "01");
+                else
+                {
+                    String status=dbHelper.select(dbHelper,"user","temp_bool","where id="+user);
+                    String status2=dbHelper.select(dbHelper,"user","time_bool","where id="+user);
+                    status+=status2;
+                    String time=dbHelper.select(dbHelper,"user","time","where id="+user);
+                    String temp= dbHelper.select(dbHelper,"user","temp","where id="+user);
+                    stream.sendSignal(status,time,temp);
+                }
                 conn.sendData(stream);
             }else{
-                stream.sendSignal("00", "00", "01");
+                stream.sendSignal("00", "00", "00");
                 conn.sendData(stream);
             }
             flag = !flag;
@@ -271,11 +283,15 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
             String [][] str12= {{"name","Profile 3"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
             String [][] str13= {{"name","Profile 4"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
             String [][] str14= {{"name","Profile 5"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
-            String [][] str15= {{"date","2017-07-02"},{"time","10"},{"temperature","25"}};
-            String [][] str16= {{"date","2017-07-03"},{"time","20"},{"temperature","26"}};
-            String [][] str17= {{"date","2017-07-04"},{"time","30"},{"temperature","24"}};
-            String [][] str18= {{"date","2017-07-05"},{"time","40"},{"temperature","23"}};
-            String [][] str19= {{"date","2017-07-06"},{"time","50"},{"temperature","27"}};
+            String [][] str15= {{"date","2017-07-01"},{"time","10"},{"temperature","25"}};
+            String [][] str16= {{"date","2017-07-02"},{"time","20"},{"temperature","26"}};
+            String [][] str17= {{"date","2017-07-03"},{"time","30"},{"temperature","24"}};
+            String [][] str18= {{"date","2017-07-04"},{"time","40"},{"temperature","23"}};
+            String [][] str19= {{"date","2017-07-05"},{"time","50"},{"temperature","27"}};
+            String [][] str20= {{"date","2017-07-06"},{"time","10"},{"temperature","25"}};
+            String [][] str21= {{"date","2017-07-07"},{"time","20"},{"temperature","26"}};
+            String [][] str22= {{"date","2017-07-08"},{"time","30"},{"temperature","24"}};
+            String [][] str23= {{"date","2017-07-09"},{"time","40"},{"temperature","23"}};
 
             dbHelper.insert(dbHelper,str1,"image");
             dbHelper.insert(dbHelper,str2,"image");
@@ -296,6 +312,10 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
             dbHelper.insert(dbHelper,str17,"statistic");
             dbHelper.insert(dbHelper,str18,"statistic");
             dbHelper.insert(dbHelper,str19,"statistic");
+            dbHelper.insert(dbHelper,str20,"statistic");
+            dbHelper.insert(dbHelper,str21,"statistic");
+            dbHelper.insert(dbHelper,str22,"statistic");
+            dbHelper.insert(dbHelper,str23,"statistic");
             setUser(1,"Current User");
             setUser(1,"First run");
 

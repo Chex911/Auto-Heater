@@ -1,15 +1,21 @@
 package layout;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.example.marcinwlodarczyk.tabbed.DBHelper;
 import com.example.marcinwlodarczyk.tabbed.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,7 +73,35 @@ public class SubPage02 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sub_page02, container, false);
+        View view= inflater.inflate(R.layout.fragment_sub_page02, container, false);
+        Spinner spn =(Spinner) view.findViewById(R.id.spinner_main);
+        ArrayList<String> ar = new ArrayList<String>();
+        ar.add("Continuous work");
+        String[] users=dbHelper.select(dbHelper, "user", "name");
+        for(String user : users) {
+            ar.add(user);
+        }
+
+        spn.setAdapter(new ArrayAdapter<String>(context,
+                android.R.layout.simple_spinner_dropdown_item, ar));
+        spn.setSelection(getUser());
+//        spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view,
+//                                       int position, long id) {
+//                // показываем позиция нажатого элемента
+////                SharedPreferences sPref = getPreferences(MODE_PRIVATE);
+////                SharedPreferences.Editor ed = sPref.edit();
+////                ed.putString(SAVED_TEXT, "1");
+////                ed.commit();
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> arg0) {
+//            }
+//        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -113,5 +147,11 @@ public class SubPage02 extends Fragment {
         this.dbHelper=dbHelper;
 
         // Required empty public constructor
+    }
+    private int getUser()
+    {
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        int savedText = sharedPref.getInt("Current User",0);
+        return savedText;
     }
 }

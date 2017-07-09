@@ -29,6 +29,8 @@ import android.widget.TextView;
 import com.example.marcinwlodarczyk.tabbed.DBHelper;
 import com.example.marcinwlodarczyk.tabbed.R;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -284,6 +286,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
                             dbHelper.update_where(dbHelper, input.getText().toString(), "name", "id", "user", getUser());
                             spinner.setAdapter(new ArrayAdapter<String>(context,
                                     android.R.layout.simple_spinner_dropdown_item, dbHelper.select(dbHelper, "user", "name")));
+
                             spinner.setSelection(getUser() - 1);
                         }
                     });
