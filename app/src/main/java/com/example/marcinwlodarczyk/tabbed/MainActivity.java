@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
     public void onClickBT(View v) {
 
         txtArduino = (TextView) findViewById(R.id.txtArduino);
+        Button btn= (Button) findViewById(R.id.MainButton);
         Spinner sp_main=(Spinner) findViewById(R.id.spinner_main);
         int user=sp_main.getSelectedItemPosition();
         if (v.getId() == R.id.MainButton) {
@@ -128,10 +129,14 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
                     String temp= dbHelper.select(dbHelper,"user","temp","where id="+user);
                     stream.sendSignal(status,time,temp);
                 }
+                btn.setBackgroundResource(R.drawable.round_btn_off);
+                btn.setText("Stop");
                 conn.sendData(stream);
             }else{
                 stream.sendSignal("00", "00", "00");
                 conn.sendData(stream);
+                btn.setBackgroundResource(R.drawable.round_btn_on);
+                btn.setText("Start");
             }
             flag = !flag;
 
