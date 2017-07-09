@@ -22,13 +22,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+
 import com.example.marcinwlodarczyk.tabbed.DBHelper;
 import com.example.marcinwlodarczyk.tabbed.R;
-import com.example.marcinwlodarczyk.tabbed.bluetooth_atask_conn;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -211,18 +210,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
 
                 }
             });
-            ManConn = (Button) view.findViewById(R.id.manual_con);
-            ManConn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //conn.setView(txtArduino);
-//                if (v.getId() == R.id.manual_con) {
-//                    Log.d("TAG", "DONE");
-//                    new bluetooth_atask_conn().execute(); //Call the class to connect;
-//                }
-                    new bluetooth_atask_conn().execute();
-                }
-            });
+
 
             spinner = (Spinner) view.findViewById(R.id.user_spinner);
 

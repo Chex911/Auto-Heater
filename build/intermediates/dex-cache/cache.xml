@@ -3,39 +3,30 @@
 
     <item
         is-multidex="true"
-        jar="/Users/marcinwlodarczyk/AndroidStudioProjects/AutoHeater_v4/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jar="/Users/marcinwlodarczyk/AndroidStudioProjects/Auto-Heater/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e600fa1869ec8662b6562abb34275180e08a0d80">
+        <dex dex="/Users/marcinwlodarczyk/AndroidStudioProjects/Auto-Heater/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_e84d52db7862eb6ffaa0617d466c3f9e389f580b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/marcinwlodarczyk/AndroidStudioProjects/Auto-Heater/app/libs/GraphView-4.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="3626a38455159707e355da96a61e598fbbc049e9">
+        <dex dex="/Users/marcinwlodarczyk/AndroidStudioProjects/Auto-Heater/app/build/intermediates/transforms/dex/debug/folders/1000/2/GraphView-4.2.1_abafc81007a757bb27a9640f9d22cbefd59dbc52/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/marcinwlodarczyk/AndroidStudioProjects/Auto-Heater/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
-        <dex dex="/Users/marcinwlodarczyk/AndroidStudioProjects/AutoHeater_v4/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_9a95a82140c6a3a4bd792370057c2ac4be297e30/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/marcinwlodarczyk/AndroidStudioProjects/AutoHeater_v4/app/libs/GraphView-4.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="3626a38455159707e355da96a61e598fbbc049e9">
-        <dex dex="/Users/marcinwlodarczyk/AndroidStudioProjects/AutoHeater_v4/app/build/intermediates/transforms/dex/debug/folders/1000/2/GraphView-4.2.1_483956753004e3f488b1d214c684c6aee0cb18a7/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/marcinwlodarczyk/AndroidStudioProjects/AutoHeater_v4/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="4bb2606ea5bdf887b34f81bdf14f30bd59a62fb6">
-        <dex dex="/Users/marcinwlodarczyk/AndroidStudioProjects/AutoHeater_v4/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_ed0c51c67d385c7eb55dd0eb22d6065b401bf6e5/classes.dex" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/marcinwlodarczyk/AndroidStudioProjects/AutoHeater_v4/app/libs/GraphView-4.2.1.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="3626a38455159707e355da96a61e598fbbc049e9">
-        <dex dex="/Users/marcinwlodarczyk/AndroidStudioProjects/AutoHeater_v4/app/build/intermediates/pre-dexed/debug/GraphView-4.2.1_483956753004e3f488b1d214c684c6aee0cb18a7.jar" />
+        <dex dex="/Users/marcinwlodarczyk/AndroidStudioProjects/Auto-Heater/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_fb9ba8c9b7d03874ceb4f4530e27de33a19af2a0/classes.dex" />
     </item>
 
 </items>

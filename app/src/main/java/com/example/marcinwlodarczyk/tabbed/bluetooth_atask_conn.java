@@ -13,15 +13,15 @@ import java.util.UUID;
  * Created by marcinwlodarczyk on 09.06.2017.
  */
 
-public class bluetooth_atask_conn extends AsyncTask<Void, Void, Void> {
-    BluetoothAdapter myBluetooth = null;
-    BluetoothSocket btSocket = null;
+public class bluetooth_atask_conn extends AsyncTask<Boolean, Boolean, Boolean> {
+    public BluetoothAdapter myBluetooth = null;
+    public BluetoothSocket btSocket = null;
+    public BluetoothDevice dispositivo = null;
     private boolean isBtConnected = false;
-    //SPP UUID. Look for it
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private static String address = "98:D3:31:FB:4F:0F";
-
     private boolean ConnectSuccess = true; //if it's here, it's almost connected
+    public AsyncResponse_conn delegate = null;
 
     @Override
     protected void onPreExecute()
@@ -30,14 +30,14 @@ public class bluetooth_atask_conn extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
+    protected Boolean doInBackground(Boolean... devices) //while the progress dialog is shown, the connection is done in background
     {
         try
         {
             if (btSocket == null || !isBtConnected)
             {
                 myBluetooth = BluetoothAdapter.getDefaultAdapter(); //BluetoothAdapter
-                BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);
+                dispositivo = myBluetooth.getRemoteDevice(address);
                 btSocket = dispositivo.createRfcommSocketToServiceRecord(MY_UUID);
                 BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                 btSocket.connect();//start connection
@@ -51,9 +51,9 @@ public class bluetooth_atask_conn extends AsyncTask<Void, Void, Void> {
         return null;
     }
     @Override
-    protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
+    protected void onPostExecute(Boolean result) //after the doInBackground, it checks if everything went fine
     {
-        super.onPostExecute(result);
+
         //MainActivity.conn=5;
         if (!ConnectSuccess)
         {
@@ -65,6 +65,7 @@ public class bluetooth_atask_conn extends AsyncTask<Void, Void, Void> {
         {
             Log.d("onPostExecute", "Conenected.");
             isBtConnected = true;
+            delegate.processConn_result(isBtConnected);
         }
     }
 }

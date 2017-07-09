@@ -35,8 +35,7 @@
 
             <Space
                 android:layout_width="38dp"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="match_parent" />
 
             <Spinner
                 android:id="@+id/user_spinner"
@@ -121,20 +120,12 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/test"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.38"
-                android:onClick="onClickInsert"
-                android:text="Button" />
-
-            <Button
                 android:id="@+id/manual_con"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.38"
                 android:background="@color/buttons"
-                android:onClick="onClickBT1"
+                android:onClick="onClickManual"
                 android:text="Manually Connect to Heater" />
         </LinearLayout>
 

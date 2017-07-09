@@ -1,14 +1,9 @@
 package com.example.marcinwlodarczyk.tabbed;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,14 +12,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.NumberPicker;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,10 +26,13 @@ import layout.SubPage03;
 
 import static com.example.marcinwlodarczyk.tabbed.R.id.container;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AsyncResponse_info{
 
     public static bluetoothManager conn;
+
     private static final String TAG = "MyActivity";
+    bluetooth_atask_conn_info conn_info = new bluetooth_atask_conn_info();
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -59,24 +52,16 @@ public class MainActivity extends AppCompatActivity {
     TextView txtArduino;
 
     private BluetoothAdapter myBluetooth = null;
-    //ImageView staus = (ImageView) findViewById(R.id.conn_status);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//
-//        try {
-//            conn = new bluetoothManager(this);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
+
         mViewPager = (ViewPager) findViewById(container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -98,7 +83,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, getIntent());
         if(resultCode==RESULT_OK && requestCode==1){
-            new bluetooth_atask_conn().execute(); //Call the class to connect;
+            conn_info.delegate = this;
+          conn_info.execute();
         }
         else{
             Log.d("TAG","DENY");
@@ -107,45 +93,32 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClickBT(View v) {
-        permissions();
+
         txtArduino = (TextView) findViewById(R.id.txtArduino);
-        //conn.setView(txtArduino);
-//        if (v.getId() == R.id.manual_con) {
-//            Log.d("TAG","DONE");
-//            new bluetooth_atask_conn().execute(); //Call the class to connect;
-//        }
+
        if (v.getId() == R.id.MainButton) {
 
-//           if (conn.getStatus()) {
-//                if (!flag) {
-//                    conn.sendData("227");
-//                } else {
-//                    conn.sendData("100");
-//                }
-//                flag = !flag;
-//            } else {
-//                conn.connect();
-//
-//                if (!flag) {
-//                    conn.sendData("1");
-//                } else {
-//                    conn.sendData("0");
-//                }
-//                flag = !flag;
-//            }
-        }
+           Arduino stream = new Arduino();
+
+           if(!flag) {
+               stream.sendSignal("00", "00", "01");
+               conn.sendData(stream);
+           }else{
+               stream.sendSignal("00", "00", "01");
+               conn.sendData(stream);
+           }
+           flag = !flag;
+
+           // stream.sendSignal("01", "00", "20"); // temp ON time OFF
+           // stream.sendSignal("10", "00", "20"); // temp OFF time ON
+
+       }
 
     }
 
-    public void onClickInsert(View v) {
-//        String [][] str = {{"date","20 jun"},{"time","25"},{"temperature","18"}};
-//        String [][] str1 = {{"name","User1"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"}};
-//        dbHelper.insert(dbHelper,str,"statistic");
-//        dbHelper.insert(dbHelper,str1,"user");
-
+    public void onClickManual(View v) {
+        permissions();
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -154,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
     public void permissions(){
         myBluetooth = BluetoothAdapter.getDefaultAdapter();
         if(myBluetooth == null)
@@ -172,7 +146,10 @@ public class MainActivity extends AppCompatActivity {
         }
         else
             {
-                new bluetooth_atask_conn().execute();
+                bluetooth_atask_conn_info tmp = new bluetooth_atask_conn_info();
+                tmp.delegate = this;
+                tmp.execute();
+
             }
     }
 
@@ -191,7 +168,16 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void processInfo_result(Conn_info output) {
+        Conn_info in = output;
 
+        try {
+            conn = new bluetoothManager(this,in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     /**
