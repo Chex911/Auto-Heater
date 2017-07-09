@@ -36,7 +36,7 @@ import layout.SubPage03;
 
 import static com.example.marcinwlodarczyk.tabbed.R.id.container;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AsyncResponse_info {
 
     public static bluetoothManager conn;
     private static final String TAG = "MyActivity";
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
+    bluetooth_atask_conn_info conn_info = new bluetooth_atask_conn_info();
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -107,32 +107,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClickBT(View v) {
-        permissions();
-//        txtArduino = (TextView) findViewById(R.id.txtArduino);
-        //conn.setView(txtArduino);
-//        if (v.getId() == R.id.manual_con) {
-//            Log.d("TAG","DONE");
-//            new bluetooth_atask_conn().execute(); //Call the class to connect;
-//        }
-       if (v.getId() == R.id.MainButton) {
 
-//           if (conn.getStatus()) {
-//                if (!flag) {
-//                    conn.sendData("227");
-//                } else {
-//                    conn.sendData("100");
-//                }
-//                flag = !flag;
-//            } else {
-//                conn.connect();
-//
-//                if (!flag) {
-//                    conn.sendData("1");
-//                } else {
-//                    conn.sendData("0");
-//                }
-//                flag = !flag;
-//            }
+        txtArduino = (TextView) findViewById(R.id.txtArduino);
+
+        if (v.getId() == R.id.MainButton) {
+
+            Arduino stream = new Arduino();
+
+            if(!flag) {
+                stream.sendSignal("00", "00", "01");
+                conn.sendData(stream);
+            }else{
+                stream.sendSignal("00", "00", "01");
+                conn.sendData(stream);
+            }
+            flag = !flag;
+
+            // stream.sendSignal("01", "00", "20"); // temp ON time OFF
+            // stream.sendSignal("10", "00", "20"); // temp OFF time ON
+
         }
 
     }
@@ -171,9 +164,26 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(turnBTon,1);
         }
         else
-            {
-                new bluetooth_atask_conn().execute();
-            }
+        {
+            bluetooth_atask_conn_info tmp = new bluetooth_atask_conn_info();
+            tmp.delegate = this;
+            tmp.execute();
+
+        }
+    }
+
+    @Override
+    public void processInfo_result(Conn_info output) {
+        Conn_info in = output;
+
+        try {
+            conn = new bluetoothManager(this,in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void onClickManual(View v) {
+        permissions();
     }
 
     @Override
