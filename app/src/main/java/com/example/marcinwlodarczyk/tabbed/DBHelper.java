@@ -30,7 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("create table  statistic ("
                 + "id integer primary key autoincrement,"
-                + "date date default (date('now')) ,"
+                + "date date default (date('now')),"
                 + "time integer,"
                 + "temperature integer"
                 + ");");
@@ -83,12 +83,12 @@ public class DBHelper extends SQLiteOpenHelper {
 //            db.insert("image",null,cv);
 //        }
 
-    public void update_where(DBHelper dbHelper ,String new_value, String params, String where,String database,int current)
+    public void update_where(DBHelper dbHelper ,String new_value, String params, String where,String table,String current)
     {
         ContentValues cv = new ContentValues();
         cv.put(params,new_value);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.update(database,cv,where + "=" + current,null);
+        db.update(table,cv,where + "=" + current,null);
         dbHelper.close();
         Log.d(TAG,"Update "+params+" to "+new_value);
     }

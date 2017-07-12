@@ -30,6 +30,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import layout.SubPage01;
 import layout.SubPage02;
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        permissions();
 //
 //        try {
 //            conn = new bluetoothManager(this);
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
         mViewPager = (ViewPager) findViewById(container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        permissions();
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         dbHelper = new DBHelper(this);
@@ -110,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
     public void onClickBT(View v) {
 
         txtArduino = (TextView) findViewById(R.id.txtArduino);
+        TextView txtTime = (TextView) findViewById(R.id.timeArduino);
         Button btn= (Button) findViewById(R.id.MainButton);
         Spinner sp_main=(Spinner) findViewById(R.id.spinner_main);
         int user=sp_main.getSelectedItemPosition();
@@ -137,6 +141,20 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
                 conn.sendData(stream);
                 btn.setBackgroundResource(R.drawable.round_btn_on);
                 btn.setText("Start");
+                String[] temp= ((String) txtArduino.getText()).split(" ");
+                String[] time= ((String) txtTime.getText()).split(" ");
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                String date = df.format(Calendar.getInstance().getTime());
+                if(temp[0]!=""&&time[0]!=""){
+                    if (dbHelper.select(dbHelper, "statistic", "date", "where date=date('" + date + "')") != "") {
+                        dbHelper.update_where(dbHelper, "" + temp[0], "temperature", "date", "statistic", "date('" + date + "')");
+                        dbHelper.update_where(dbHelper, "" + time[0], "time", "date", "statistic", "date('" + date + "')");
+
+                    } else {
+                        dbHelper.insert(dbHelper, new String[][]{{"time", time[0]}, {"temperature", temp[0]}}, "statistic");
+                    }
+                }
+
             }
             flag = !flag;
 
@@ -147,13 +165,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
 
     }
 
-    public void onClickInsert(View v) {
-//        String [][] str = {{"date","20 jun"},{"time","25"},{"temperature","18"}};
-//        String [][] str1 = {{"name","User1"},{"temp_bool","0"},{"temp","0"},{"time_bool","0"},{"time","0"}};
-//        dbHelper.insert(dbHelper,str,"statistic");
-//        dbHelper.insert(dbHelper,str1,"user");
-
-    }
 
 
 
@@ -288,15 +299,15 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
             String [][] str12= {{"name","Profile 3"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
             String [][] str13= {{"name","Profile 4"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
             String [][] str14= {{"name","Profile 5"},{"temp_bool","0"},{"temp","20"},{"time_bool","0"},{"time","20"},{"image",""+R.mipmap.macos}};
-            String [][] str15= {{"date","2017-07-01"},{"time","10"},{"temperature","25"}};
-            String [][] str16= {{"date","2017-07-02"},{"time","20"},{"temperature","26"}};
-            String [][] str17= {{"date","2017-07-03"},{"time","30"},{"temperature","24"}};
-            String [][] str18= {{"date","2017-07-04"},{"time","40"},{"temperature","23"}};
-            String [][] str19= {{"date","2017-07-05"},{"time","50"},{"temperature","27"}};
-            String [][] str20= {{"date","2017-07-06"},{"time","10"},{"temperature","25"}};
-            String [][] str21= {{"date","2017-07-07"},{"time","20"},{"temperature","26"}};
-            String [][] str22= {{"date","2017-07-08"},{"time","30"},{"temperature","24"}};
-            String [][] str23= {{"date","2017-07-09"},{"time","40"},{"temperature","23"}};
+            String [][] str15= {{"date","2017-07-03"},{"time","10"},{"temperature","25"}};
+            String [][] str16= {{"date","2017-07-04"},{"time","20"},{"temperature","26"}};
+            String [][] str17= {{"date","2017-07-05"},{"time","30"},{"temperature","24"}};
+            String [][] str18= {{"date","2017-07-06"},{"time","40"},{"temperature","23"}};
+            String [][] str19= {{"date","2017-07-07"},{"time","50"},{"temperature","27"}};
+            String [][] str20= {{"date","2017-07-08"},{"time","10"},{"temperature","25"}};
+            String [][] str21= {{"date","2017-07-09"},{"time","20"},{"temperature","26"}};
+            String [][] str22= {{"date","2017-07-10"},{"time","30"},{"temperature","24"}};
+            String [][] str23= {{"date","2017-07-11"},{"time","40"},{"temperature","23"}};
 
             dbHelper.insert(dbHelper,str1,"image");
             dbHelper.insert(dbHelper,str2,"image");

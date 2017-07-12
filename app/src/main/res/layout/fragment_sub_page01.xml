@@ -61,7 +61,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.01"
-                        android:text="Energy"
+                        android:text="Cost"
                         android:textSize="25sp" />
 
                     <TextView
@@ -72,7 +72,7 @@
                         android:gravity="center_vertical"
                         android:text="20 KWh"
                         android:textAlignment="center"
-                        android:textSize="55sp" />
+                        android:textSize="53sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -97,7 +97,7 @@
                         android:gravity="center_vertical"
                         android:text="20 m"
                         android:textAlignment="center"
-                        android:textSize="55sp" />
+                        android:textSize="53sp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -130,7 +130,7 @@
                         android:gravity="center_vertical"
                         android:text="20 JUN"
                         android:textAlignment="center"
-                        android:textSize="55sp" />
+                        android:textSize="53sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -155,7 +155,7 @@
                         android:gravity="center_vertical"
                         android:text="18 °C"
                         android:textAlignment="center"
-                        android:textSize="55sp" />
+                        android:textSize="53sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

@@ -144,7 +144,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
                         public void onClick(View v) {
 
                             temmpp.setText(String.valueOf(np.getValue()) + " °C");
-                            dbHelper.update_where(dbHelper, String.valueOf(np.getValue()), "temp", "id", "user", getUser());
+                            dbHelper.update_where(dbHelper, String.valueOf(np.getValue()), "temp", "id", "user", ""+getUser());
                             //tv.setText(String.valueOf(np.getValue()));
                             d.dismiss();
                         }
@@ -204,7 +204,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
                         public void onClick(View v) {
 
                             time.setText(String.valueOf(np.getValue()) + " m");
-                            dbHelper.update_where(dbHelper, String.valueOf(np.getValue()), "time", "id", "user", getUser());
+                            dbHelper.update_where(dbHelper, String.valueOf(np.getValue()), "time", "id", "user", ""+getUser());
                             //tv.setText(String.valueOf(np.getValue()));
                             d.dismiss();
                         }
@@ -252,14 +252,14 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
             swtemp.setChecked(dbHelper.select(dbHelper, "user", "temp_bool", "WHERE id=" + getUser()).equals("1"));
             swtemp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    dbHelper.update_where(dbHelper, isChecked ? "1" : "0", "temp_bool", "id", "user", getUser());
+                    dbHelper.update_where(dbHelper, isChecked ? "1" : "0", "temp_bool", "id", "user", ""+getUser());
                 }
             });
             swtime = (Switch) view.findViewById(R.id.switch_time);
             swtime.setChecked(dbHelper.select(dbHelper, "user", "time_bool", "WHERE id=" + getUser()).equals("1"));
             swtime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    dbHelper.update_where(dbHelper, isChecked ? "1" : "0", "time_bool", "id", "user", getUser());
+                    dbHelper.update_where(dbHelper, isChecked ? "1" : "0", "time_bool", "id", "user", ""+getUser());
                 }
             });
             EditButton = (Button) view.findViewById(R.id.btn_editName);
@@ -283,7 +283,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Log.d(TAG, input.getText().toString());
-                            dbHelper.update_where(dbHelper, input.getText().toString(), "name", "id", "user", getUser());
+                            dbHelper.update_where(dbHelper, input.getText().toString(), "name", "id", "user",""+ getUser());
                             spinner.setAdapter(new ArrayAdapter<String>(context,
                                     android.R.layout.simple_spinner_dropdown_item, dbHelper.select(dbHelper, "user", "name")));
 
@@ -328,7 +328,7 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
                                     @Override
                                     public void onClick(View v) {
 
-                                        dbHelper.update_where(dbHelper, "" + source, "image", "id", "user", getUser());
+                                        dbHelper.update_where(dbHelper, "" + source, "image", "id", "user", ""+getUser());
                                         imgProfile.setImageResource(source);
                                         d.dismiss();
                                     }

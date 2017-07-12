@@ -46,7 +46,7 @@ public class bluetoothManager{
                         byte[] readBuf = (byte[]) msg.obj;
                         String strIncom = new String(readBuf, 0, msg.arg1);
                         String[] signal = Arduino.obtainSignal(strIncom);
-                        if(txtArduino != null) {
+                        if(txtArduino != null&&signal[0]!="00 °C") {
                             txtArduino.setText(signal[0]);
                         }
                         if(timeArduino != null) {
