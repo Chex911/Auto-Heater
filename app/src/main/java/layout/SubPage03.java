@@ -5,15 +5,19 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -309,6 +313,11 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
                 public void onClick(View v) {
                     final Dialog d = new Dialog(context);
                     d.setTitle("Choose a new image");
+                    WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+                    Display display = wm.getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    int width = size.x;
                     LinearLayout layout = new LinearLayout(context);
                     layout.setOrientation(LinearLayout.HORIZONTAL);
 // Set up the input
@@ -321,8 +330,8 @@ public class SubPage03 extends Fragment implements View.OnClickListener,NumberPi
                                 final ImageView input2 = new ImageView(context);
                                 final int source = Integer.parseInt(images[i + j]);
                                 input2.setImageResource(source);
-                                input2.setMinimumHeight(275);
-                                input2.setMinimumWidth(275);
+                                input2.setMinimumHeight(width/5);
+                                input2.setMinimumWidth(width/5);
                                 input2.setClickable(true);
                                 input2.setOnClickListener(new View.OnClickListener() {
                                     @Override
