@@ -8,7 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -135,6 +138,42 @@ public class DBHelper extends SQLiteOpenHelper {
         dbHelper.close();
         Log.d(TAG,ParameterName+": "+temp_address);
         return  temp_address;
+    }
+    public void completeData(DBHelper dbHelper)
+    {
+        String temp_address="";
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String date = df.format(Calendar.getInstance().getTime());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String selectQuery = "SELECT date FROM statistic " +
+                "ORDER BY date DESC LIMIT 1;";
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c.moveToFirst()) {
+            temp_address = c.getString(0);
+        }
+        selectQuery = "SELECT julianday('"+date+"')" +
+                " - julianday('"+temp_address+"') from statistic;";
+        c = db.rawQuery(selectQuery, null);
+        String[] divdate= temp_address.split("-");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH,Integer.parseInt(divdate[2]));
+        calendar.set(Calendar.MONTH,Integer.parseInt(divdate[1])-1);
+        calendar.set(Calendar.YEAR, Integer.parseInt(divdate[0]));
+        if (c.moveToFirst()) {
+            temp_address = c.getString(0);
+        }
+        Log.d("DATABASE",temp_address);
+        c.close();
+        dbHelper.close();
+
+        for (int i=0;i<Integer.parseInt(temp_address);i++)
+        {
+            calendar.add(Calendar.DATE, 1);
+            date=df.format(calendar.getTime());
+            dbHelper.insert(dbHelper,new String[][]{{"date",date},{"time","0"},{"temperature","0"}},"statistic");
+        }
+
+
     }
 
 }

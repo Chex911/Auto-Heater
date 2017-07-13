@@ -24,6 +24,7 @@ import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -266,13 +267,13 @@ public class SubPage01 extends Fragment implements View.OnClickListener,Compound
         {
             String[] str= new String[5];
             String[] separated=centralDate.split("-");
+            java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM");
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Integer.parseInt(separated[0]),Integer.parseInt(separated[1])-1,Integer.parseInt(separated[2]));
+            calendar.add(Calendar.DATE, -2);
             for (int i=0;i<5;i++){
-                int day=Integer.parseInt(separated[2])-2+i;
-                int month=Integer.parseInt(separated[1]);
-                if(day<=0)
-                    str[i]=(29+i)+"/"+(month-1);
-                else
-                str[i]=day+"/"+month;
+                str[i]= df.format(calendar.getTime());
+                calendar.add(Calendar.DATE, 1);
             }
             return str;
         }

@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
         dbHelper = new DBHelper(this);
         mViewPager.setCurrentItem(1);
         firstRun();
+        dbHelper.completeData(dbHelper);
 
     }
 
@@ -146,13 +147,9 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 String date = df.format(Calendar.getInstance().getTime());
                 if(temp[0]!=""&&time[0]!=""){
-                    if (dbHelper.select(dbHelper, "statistic", "date", "where date=date('" + date + "')") != "") {
                         dbHelper.update_where(dbHelper, "" + temp[0], "temperature", "date", "statistic", "date('" + date + "')");
                         dbHelper.update_where(dbHelper, "" + time[0], "time", "date", "statistic", "date('" + date + "')");
 
-                    } else {
-                        dbHelper.insert(dbHelper, new String[][]{{"time", time[0]}, {"temperature", temp[0]}}, "statistic");
-                    }
                 }
 
             }
