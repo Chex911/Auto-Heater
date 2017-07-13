@@ -113,52 +113,58 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse_inf
 
     public void onClickBT(View v) {
 
-        txtArduino = (TextView) findViewById(R.id.txtArduino);
-        TextView txtTime = (TextView) findViewById(R.id.timeArduino);
-        Button btn= (Button) findViewById(R.id.MainButton);
-        Spinner sp_main=(Spinner) findViewById(R.id.spinner_main);
-        int user=sp_main.getSelectedItemPosition();
-        if (v.getId() == R.id.MainButton) {
+            txtArduino = (TextView) findViewById(R.id.txtArduino);
+            TextView txtTime = (TextView) findViewById(R.id.timeArduino);
+            Button btn = (Button) findViewById(R.id.MainButton);
+            Spinner sp_main = (Spinner) findViewById(R.id.spinner_main);
+            int user = sp_main.getSelectedItemPosition();
+        try {
+            if (v.getId() == R.id.MainButton) {
 
-            Arduino stream = new Arduino();
+                Arduino stream = new Arduino();
 
-            if(!flag) {
-                if(user==0)
-                stream.sendSignal("00", "00", "01");
-                else
-                {
-                    String status=dbHelper.select(dbHelper,"user","temp_bool","where id="+user);
-                    String status2=dbHelper.select(dbHelper,"user","time_bool","where id="+user);
-                    status+=status2;
-                    String time=dbHelper.select(dbHelper,"user","time","where id="+user);
-                    String temp= dbHelper.select(dbHelper,"user","temp","where id="+user);
-                    stream.sendSignal(status,time,temp);
-                }
-                btn.setBackgroundResource(R.drawable.round_btn_off);
-                btn.setText("Stop");
-                conn.sendData(stream);
-            }else{
-                stream.sendSignal("00", "00", "00");
-                conn.sendData(stream);
-                btn.setBackgroundResource(R.drawable.round_btn_on);
-                btn.setText("Start");
-                String[] temp= ((String) txtArduino.getText()).split(" ");
-                String[] time= ((String) txtTime.getText()).split(" ");
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                String date = df.format(Calendar.getInstance().getTime());
-                if(temp[0]!=""&&time[0]!=""){
+                if (!flag) {
+                    if (user == 0)
+                        stream.sendSignal("00", "00", "01");
+                    else {
+                        String status = dbHelper.select(dbHelper, "user", "temp_bool", "where id=" + user);
+                        String status2 = dbHelper.select(dbHelper, "user", "time_bool", "where id=" + user);
+                        status += status2;
+                        String time = dbHelper.select(dbHelper, "user", "time", "where id=" + user);
+                        String temp = dbHelper.select(dbHelper, "user", "temp", "where id=" + user);
+                        stream.sendSignal(status, time, temp);
+                    }
+                    btn.setBackgroundResource(R.drawable.round_btn_off);
+                    btn.setText("Stop");
+                    conn.sendData(stream);
+                } else {
+                    stream.sendSignal("00", "00", "00");
+                    conn.sendData(stream);
+                    btn.setBackgroundResource(R.drawable.round_btn_on);
+                    btn.setText("Start");
+                    String[] temp = ((String) txtArduino.getText()).split(" ");
+                    String[] time = ((String) txtTime.getText()).split(" ");
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                    String date = df.format(Calendar.getInstance().getTime());
+                    if (temp[0] != "" && time[0] != "") {
                         dbHelper.update_where(dbHelper, "" + temp[0], "temperature", "date", "statistic", "date('" + date + "')");
                         dbHelper.update_where(dbHelper, "" + time[0], "time", "date", "statistic", "date('" + date + "')");
 
+                    }
+
                 }
+                flag = !flag;
+
+                // stream.sendSignal("01", "00", "20"); // temp ON time OFF
+                // stream.sendSignal("10", "00", "20"); // temp OFF time ON
 
             }
+        } catch (IllegalStateException | NullPointerException e){
+        Log.d(TAG,e.getMessage());
             flag = !flag;
-
-            // stream.sendSignal("01", "00", "20"); // temp ON time OFF
-            // stream.sendSignal("10", "00", "20"); // temp OFF time ON
-
-        }
+            btn.setBackgroundResource(R.drawable.round_btn_on);
+            btn.setText("Start");
+    }
 
     }
 
