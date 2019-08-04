@@ -3,8 +3,6 @@ package layout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.icu.text.DateFormat;
-import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,8 +14,8 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.example.marcinwlodarczyk.tabbed.DBHelper;
-import com.example.marcinwlodarczyk.tabbed.R;
+import com.example.yevgensydorenko.tabbed.DBHelper;
+import com.example.yevgensydorenko.tabbed.R;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
@@ -25,7 +23,6 @@ import com.jjoe64.graphview.series.DataPoint;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.

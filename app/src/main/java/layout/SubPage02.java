@@ -8,12 +8,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.example.marcinwlodarczyk.tabbed.DBHelper;
-import com.example.marcinwlodarczyk.tabbed.R;
+import com.example.yevgensydorenko.tabbed.DBHelper;
+import com.example.yevgensydorenko.tabbed.R;
 
 import java.util.ArrayList;
 

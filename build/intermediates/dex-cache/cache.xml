@@ -2,31 +2,130 @@
 <items version="2" >
 
     <item
-        is-multidex="true"
-        jar="/Users/marcinwlodarczyk/AndroidStudioProjects/Auto-Heater/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="C:\Users\zvgaa\.android\build-cache\9759574b4598fd3068842f5a47540cd4fcafe945\output\jars\classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
-        sha1="e600fa1869ec8662b6562abb34275180e08a0d80">
-        <dex dex="/Users/marcinwlodarczyk/AndroidStudioProjects/Auto-Heater/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_e84d52db7862eb6ffaa0617d466c3f9e389f580b/classes.dex" />
+        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\classes_1ae5a91d6864559f310abfc44787ba827a2dfe61.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="/Users/marcinwlodarczyk/AndroidStudioProjects/Auto-Heater/app/libs/GraphView-4.2.1.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="C:\Users\zvgaa\.android\build-cache\0136c8e15564d97dff20f972a4740ee0b3bafe7e\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\classes_201acc7cc20f2fa57414447c47b4c51ab7ac95ee.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\zvgaa\.android\build-cache\5ad379be10fa632900159f2866fa2254f22e8042\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\classes_07277ef431d205467def9700dfcb7a648f99818f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\zvgaa\.android\build-cache\ad8ec65a24b3f6738b0bfb30fb4d81ee7b205d80\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\classes_b8e4d80adc3f336f3d7f82ff842bbf010cedd54d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\zvgaa\.android\build-cache\b01c75331a784d5a6d5352d164996f27d5dd815a\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d4cf6227dd6a2ceff0f7dcf0c324380b7abf2c28">
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\classes_cea2297ddac9f2879853bafa52789cff4876ea72.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\zvgaa\.android\build-cache\247f1e7998923148f2a790f025c25be79199fae6\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\classes_50979a78b89d88e984a869abc9e3d3a2f01c9013.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\zvgaa\.android\build-cache\c7cc9bde23b342b13e718584254a0741c8c7bcfc\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\classes_1432fad7bd65dcead556f808b53062dc64d04561.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\libs\GraphView-4.2.1.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
         sha1="3626a38455159707e355da96a61e598fbbc049e9">
-        <dex dex="/Users/marcinwlodarczyk/AndroidStudioProjects/Auto-Heater/app/build/intermediates/transforms/dex/debug/folders/1000/2/GraphView-4.2.1_abafc81007a757bb27a9640f9d22cbefd59dbc52/classes.dex" />
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\GraphView-4.2.1_ef5b9616b3f7fb89b186e4e7f4ce8db3fef4b1dd.jar" />
     </item>
     <item
-        is-multidex="true"
-        jar="/Users/marcinwlodarczyk/AndroidStudioProjects/Auto-Heater/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
+        is-multidex="false"
+        jar="C:\Users\zvgaa\.android\build-cache\4f761a2c53700f2d69e70d3775fbbfd8942a0461\output\jars\classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
-        sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
-        <dex dex="/Users/marcinwlodarczyk/AndroidStudioProjects/Auto-Heater/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_fb9ba8c9b7d03874ceb4f4530e27de33a19af2a0/classes.dex" />
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\classes_cd58b6526ce2a4de6b680486317ba2e702a7c19e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\zvgaa\.android\build-cache\a43a36f360e78c37dd77853625c9e4c6a55c189f\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="38789e20ace9ab7dbd00554bd2673ab424478d3b">
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\classes_8cec71e543ed6b3d68ff84f3462127723cb7f5c5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\zvgaa\.android\build-cache\47bde61e48b6d36bda4b3976c8b9964da9eb24e1\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\classes_dcb6be673bd7395e982b24fbf451cb3b74b74a1b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\zvgaa\.android\build-cache\f553a60bafe68da48f141b4be3b590a68d2cd82f\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\classes_26e6d6d0c5eb439e863149e1862b65a06ec96b20.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\zvgaa\.android\build-cache\ff098eda1abcf0ed56d2a54fd8cc10c2ec0fb409\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="95519720620b553f63afc789beba9ad582807f7c">
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\classes_7e50c7f02d379fc5b949283405e3611269974260.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\zvgaa\AppData\Local\Android\Sdk\extras\android\m2repository\com\android\support\support-annotations\25.3.1\support-annotations-25.3.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
+        <dex dex="C:\Users\zvgaa\StudioProjects\Auto-Heater\app\build\intermediates\pre-dexed\debug\support-annotations-25.3.1_50f5efc260293030ab7e4d5b0a87818934883c88.jar" />
     </item>
 
 </items>

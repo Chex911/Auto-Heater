@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -30,10 +29,8 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.marcinwlodarczyk.tabbed.DBHelper;
-import com.example.marcinwlodarczyk.tabbed.R;
-
-import java.util.ArrayList;
+import com.example.yevgensydorenko.tabbed.DBHelper;
+import com.example.yevgensydorenko.tabbed.R;
 
 /**
  * A simple {@link Fragment} subclass.
