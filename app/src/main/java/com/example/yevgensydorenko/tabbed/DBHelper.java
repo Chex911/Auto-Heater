@@ -18,9 +18,15 @@ import java.util.Calendar;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DBhelper";
+
     public DBHelper(Context context) {
         // конструктор суперкласса
         super(context, "myDB", null, 1);
+    }
+
+    public DBHelper(Context context, String dbName) {
+        // конструктор суперкласса
+        super(context, dbName, null, 1);
     }
 
     @Override
@@ -29,14 +35,14 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d(TAG, "--- onCreate database ---");
         // создаем таблицу с полями
 
-        db.execSQL("create table  statistic ("
+        db.execSQL("create table if not exists statistic ("
                 + "id integer primary key autoincrement,"
                 + "date date default (date('now')),"
                 + "time integer,"
                 + "temperature integer"
                 + ");");
 
-        db.execSQL("create table  image ("
+        db.execSQL("create table if not exists image ("
                 + "id integer primary key autoincrement,"
                 + "name text,"
                 + "source text"
@@ -53,8 +59,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + ");");
 
     }
-    public void insert(DBHelper dbHelper,String[][] params,String table)
-    {
+
+    public void insert(DBHelper dbHelper, String[][] params, String table) {
         ContentValues cv = new ContentValues();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Log.d(TAG, "--- Insert in mytable: ---");
@@ -84,38 +90,37 @@ public class DBHelper extends SQLiteOpenHelper {
 //            db.insert("image",null,cv);
 //        }
 
-    public void update_where(DBHelper dbHelper ,String new_value, String params, String where,String table,String current)
-    {
+    public void update_where(DBHelper dbHelper, String new_value, String params, String where, String table, String current) {
         ContentValues cv = new ContentValues();
-        cv.put(params,new_value);
+        cv.put(params, new_value);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.update(table,cv,where + "=" + current,null);
+        db.update(table, cv, where + "=" + current, null);
         dbHelper.close();
-        Log.d(TAG,"Update "+params+" to "+new_value);
+        Log.d(TAG, "Update " + params + " to " + new_value);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-    public String [] select(DBHelper dbHelper,String TableName,String ColumnName )
-    {
-        String [] temp_address;
+
+    public String[] select(DBHelper dbHelper, String TableName, String ColumnName) {
+        String[] temp_address;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String selectQuery = "SELECT * FROM "+TableName;
+        String selectQuery = "SELECT * FROM " + TableName;
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            temp_address=new String[c.getCount()];
-            int i=0;
-            temp_address[i]=c.getString(c.getColumnIndex(ColumnName));
-            while (c.moveToNext()){
+            temp_address = new String[c.getCount()];
+            int i = 0;
+            temp_address[i] = c.getString(c.getColumnIndex(ColumnName));
+            while (c.moveToNext()) {
                 i++;
-            temp_address[i]= c.getString(c.getColumnIndex(ColumnName));
+                temp_address[i] = c.getString(c.getColumnIndex(ColumnName));
             }
             c.close();
             dbHelper.close();
             Log.d(TAG, Arrays.toString(temp_address));
-            return  temp_address;
+            return temp_address;
         }
         c.close();
         dbHelper.close();
@@ -123,23 +128,23 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     }
-    public String select(DBHelper dbHelper ,String TableName, String ParameterName,String condition)
-    {
-        String temp_address="";
+
+    public String select(DBHelper dbHelper, String TableName, String ParameterName, String condition) {
+        String temp_address = "";
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String selectQuery = "SELECT "+ParameterName+" FROM "+TableName+" "+condition+";";
+        String selectQuery = "SELECT " + ParameterName + " FROM " + TableName + " " + condition + ";";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-          temp_address = c.getString(c.getColumnIndex(ParameterName));
+            temp_address = c.getString(c.getColumnIndex(ParameterName));
         }
         c.close();
         dbHelper.close();
-        Log.d(TAG,ParameterName+": "+temp_address);
-        return  temp_address;
+        Log.d(TAG, ParameterName + ": " + temp_address);
+        return temp_address;
     }
-    public void completeData(DBHelper dbHelper)
-    {
-        String temp_address="";
+
+    public void completeData(DBHelper dbHelper) {
+        String temp_address = "";
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String date = df.format(Calendar.getInstance().getTime());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -149,29 +154,31 @@ public class DBHelper extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             temp_address = c.getString(0);
         }
-        selectQuery = "SELECT julianday('"+date+"')" +
-                " - julianday('"+temp_address+"') from statistic;";
+        selectQuery = "SELECT julianday('" + date + "')" +
+                " - julianday('" + temp_address + "') from statistic;";
         c = db.rawQuery(selectQuery, null);
-        String[] divdate= temp_address.split("-");
+        String[] divdate = temp_address.split("-");
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH,Integer.parseInt(divdate[2]));
-        calendar.set(Calendar.MONTH,Integer.parseInt(divdate[1])-1);
+        calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(divdate[2]));
+        calendar.set(Calendar.MONTH, Integer.parseInt(divdate[1]) - 1);
         calendar.set(Calendar.YEAR, Integer.parseInt(divdate[0]));
         if (c.moveToFirst()) {
             temp_address = c.getString(0);
         }
-        Log.d("DATABASE",temp_address);
+        Log.d("DATABASE", temp_address);
         c.close();
         dbHelper.close();
 
-        for (int i=0;i<Integer.parseInt(temp_address);i++)
-        {
+        for (int i = 0; i < Integer.parseInt(temp_address); i++) {
             calendar.add(Calendar.DATE, 1);
-            date=df.format(calendar.getTime());
-            dbHelper.insert(dbHelper,new String[][]{{"date",date},{"time","0"},{"temperature","0"}},"statistic");
+            date = df.format(calendar.getTime());
+            dbHelper.insert(dbHelper, new String[][]{{"date", date}, {"time", "0"}, {"temperature", "0"}}, "statistic");
         }
+    }
 
-
+    public void clearTable( String tableName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from " + tableName);
     }
 
 }

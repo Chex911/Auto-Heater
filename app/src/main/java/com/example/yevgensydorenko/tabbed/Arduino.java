@@ -10,27 +10,33 @@ import java.nio.ByteBuffer;
 
 public class Arduino {
     private static final String TAG = "Arduino";
-    private  String message = "10000";
+    private String message = "10000";
     private byte[] bytes = null;
 
 
-    public Arduino(){
+    public Arduino() {
 
     }
 
-    public static String[] obtainSignal(String s){
+    public static String[] obtainSignal(String s) {
         String[] output;
-        if(s.length() > 6) {
-            Log.d(TAG,"obtainSignal() ----> "+s);
-            output = s.split(",");
-            output[0] += " °C";
-            output[1] =output[1].substring(0,2)+" m";
-            return output;
+        Log.d(TAG, "ANY: obtainSignal() ----> " +s + " LENGTH: " + s.length());
+        if (s.length() >= 3) {
+//            Log.d(TAG, "obtainSignal() ----> " + s);
+            try {
+                output = s.split(",");
+                output[0] += " °C";
+                output[1] = output[1] + " m";
+                return output;
+            }
+            catch (ArrayIndexOutOfBoundsException e){
+                return new String[]{"00 °C", "00 m"};
+            }
         }
-        return new String[] {"00 °C","00 m"};
+        return new String[]{"00 °C", "00 m"};
     }
 
-    public void sendSignal(String... s){
+    public void sendSignal(String... s) {
         /*
             ("TRYB","TEMPERATURE","TIME")
 
@@ -44,7 +50,7 @@ public class Arduino {
 
         String output = "";
 
-        switch (s[0]){
+        switch (s[0]) {
             case "00":
                 s[0] = "1";
                 break;
@@ -69,15 +75,16 @@ public class Arduino {
 
         this.message = output;
         int tmp = Integer.parseInt(output);
+        Log.d(TAG, "TMP:"+tmp);
         bytes = ByteBuffer.allocate(4).putInt(tmp).array();
 
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return message;
     }
 
-    public byte[] getBytes(){
+    public byte[] getBytes() {
         return bytes;
     }
 }

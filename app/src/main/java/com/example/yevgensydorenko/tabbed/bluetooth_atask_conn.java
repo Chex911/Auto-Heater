@@ -40,7 +40,7 @@ public class bluetooth_atask_conn extends AsyncTask<Boolean, Boolean, Boolean> {
                 btDevice = myBluetooth.getRemoteDevice(address);
                 btSocket = btDevice.createRfcommSocketToServiceRecord(MY_UUID);
                 BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                btSocket.connect();//start connection
+                btSocket.connect();//start connectione
                 ConnectSuccess = true;
             }
         }

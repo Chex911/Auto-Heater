@@ -12,13 +12,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import static android.content.ContentValues.TAG;
 
 //import static android.icu.text.RelativeDateTimeFormatter.Direction.THIS;
 
 
-public class BluetoothManager{
+public class BluetoothManager {
 
     public Handler h;
     public TextView txtArduino;
@@ -48,11 +49,13 @@ public class BluetoothManager{
                         byte[] readBuf = (byte[]) msg.obj;
                         String strIncom = new String(readBuf, 0, msg.arg1);
                         String[] signal = Arduino.obtainSignal(strIncom);
-                        if(txtArduino != null&&signal[0]!="00 °C") {
-                            txtArduino.setText(signal[0]);
-                        }
-                        if(timeArduino != null) {
-                            timeArduino.setText(signal[1]);
+                        if (signal[0] != "00 °C" && signal[1] != "00 m") {
+                            if (txtArduino != null) {
+                                txtArduino.setText(signal[0]);
+                            }
+                            if (timeArduino != null) {
+                                timeArduino.setText(signal[1]);
+                            }
                         }
 
 //
@@ -81,16 +84,16 @@ public class BluetoothManager{
     }
 
 
-    public void connect(){
+    public void connect() {
         this.mConnectedThread = new ConnectedThread(info.getSocket());
         this.mConnectedThread.start();
     }
 
-    public void rebootThread(){
+    public void rebootThread() {
         mConnectedThread.run();
     }
 
-    public void stopThread(){
+    public void stopThread() {
         mConnectedThread.interrupt();
     }
 //    public boolean getStatus(){
@@ -102,14 +105,17 @@ public class BluetoothManager{
 //        }
 //    }
 
-    public void sendData(Arduino a){
+    public void sendData(Arduino a) {
         int result = ByteBuffer.wrap(a.getBytes()).getInt();
-        Log.d("sendData()", "message prepared: "+result);
-        mConnectedThread.write(a.getBytes());
+        Log.d("sendData()", "message prepared: " + result);
+        mConnectedThread.write(new byte[]{
+                Integer.valueOf(result / 10000).byteValue(),
+                Integer.valueOf((result / 100) % 100).byteValue(),
+                Integer.valueOf(result % 100).byteValue()});
         //mConnectedThread.write("300");
     }
 
-    private void errorExit(String title, String message){
+    private void errorExit(String title, String message) {
         Toast.makeText(activityContext, title + " - " + message, Toast.LENGTH_LONG).show();
         activityContext.finish();
     }
@@ -169,10 +175,12 @@ public class BluetoothManager{
             Log.d(TAG, "I am going to write message");
             try {
                 //byte[] bytes = ByteBuffer.allocate(4).putInt().array();
-                byte[] bytes = new byte[]{1,00,01};
-                mmOutStream.write(bytes);
+                //ByteBuffer result = ByteBuffer.wrap(message);
+                //Log.d(TAG, "I am going to write message:"+result);
+                //byte[] bytes = new byte[]{1,00,01};
+                mmOutStream.write(message);
             } catch (IOException e) {
-                Log.d(TAG, "Write message error" + e.getMessage() + "...");
+                Log.d(TAG, "Write message error " + e.getMessage() + "...");
             }
         }
 
@@ -180,7 +188,8 @@ public class BluetoothManager{
         public void cancel() {
             try {
                 mmSocket.close();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+            }
         }
     }
 
