@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +50,7 @@ public class BluetoothManager {
                         byte[] readBuf = (byte[]) msg.obj;
                         String strIncom = new String(readBuf, 0, msg.arg1);
                         String[] signal = Arduino.obtainSignal(strIncom);
-                        if (signal[0] != "00 °C" && signal[1] != "00 m") {
+                        if (!signal[0].equals("00 °C") && !signal[1].equals("00 m")) {
                             if (txtArduino != null) {
                                 txtArduino.setText(signal[0]);
                             }
@@ -106,13 +107,12 @@ public class BluetoothManager {
 //    }
 
     public void sendData(Arduino a) {
-        int result = ByteBuffer.wrap(a.getBytes()).getInt();
-        Log.d("sendData()", "message prepared: " + result);
+        String [] result = a.getMessage();
+        Log.d("sendData()", "message prepared: " + TextUtils.join(", ", result));
         mConnectedThread.write(new byte[]{
-                Integer.valueOf(result / 10000).byteValue(),
-                Integer.valueOf((result / 100) % 100).byteValue(),
-                Integer.valueOf(result % 100).byteValue()});
-        //mConnectedThread.write("300");
+                Integer.valueOf(result[0]).byteValue(),
+                Integer.valueOf(result[1]).byteValue(),
+                Integer.valueOf(result[2]).byteValue()});
     }
 
     private void errorExit(String title, String message) {

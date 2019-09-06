@@ -1,5 +1,6 @@
 package com.example.yevgensydorenko.tabbed;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.nio.ByteBuffer;
@@ -10,7 +11,7 @@ import java.nio.ByteBuffer;
 
 public class Arduino {
     private static final String TAG = "Arduino";
-    private String message = "10000";
+    private String [] message = {"1","00","00"};
     private byte[] bytes = null;
 
 
@@ -36,7 +37,7 @@ public class Arduino {
         return new String[]{"00 °C", "00 m"};
     }
 
-    public void sendSignal(String... s) {
+    public void sendSignal(String status, String time, String temp) {
         /*
             ("TRYB","TEMPERATURE","TIME")
 
@@ -50,37 +51,34 @@ public class Arduino {
 
         String output = "";
 
-        switch (s[0]) {
+        switch (status) {
             case "00":
-                s[0] = "1";
+                status = "1";
                 break;
 
             case "01":
-                s[0] = "2";
+                status = "2";
                 break;
 
             case "10":
-                s[0] = "3";
+                status = "3";
                 break;
 
             case "11":
-                s[0] = "4";
+                status = "4";
                 break;
 
         }
 
-        for (String parameter : s) {
-            output += parameter;
-        }
 
-        this.message = output;
-        int tmp = Integer.parseInt(output);
-        Log.d(TAG, "TMP:"+tmp);
-        bytes = ByteBuffer.allocate(4).putInt(tmp).array();
+        this.message = new String[]{status,time,temp};
+//        int tmp = Integer.parseInt(output);
+//        Log.d(TAG, "TMP:"+tmp);
+//        bytes = ByteBuffer.allocate(4).putInt(tmp).array();
 
     }
 
-    public String getMessage() {
+    public String [] getMessage() {
         return message;
     }
 
